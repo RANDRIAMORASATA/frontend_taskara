@@ -26,6 +26,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.userService.getUser();
+    console.log("*****************", this.user)
     this.listTitles = ROUTES.filter(listTitle => listTitle);
     this.user$ = this.userService.getUserData().pipe(
       catchError(err => {

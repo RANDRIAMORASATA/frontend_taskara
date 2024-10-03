@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { ProjectModel } from 'src/app/models/project.model';
 
 export interface ProjectsResponse {
@@ -51,4 +51,6 @@ export class ProjectService {
       catchError(this.handleError)
     );
   }
+
+
 }

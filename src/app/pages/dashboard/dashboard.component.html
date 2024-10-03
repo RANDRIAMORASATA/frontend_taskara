@@ -265,30 +265,23 @@
                 <th></th>
               </tr>
             </thead>
-            <tbody *ngFor="let task of tasks">
-              <tr>
-                <th scope="row">
-                  {{task.nameTask}}
-                </th>
-                <td>
-                  {{task.descriptionTask}}
-                </td>
-                <td>
-                  {{task.project}}
-                </td>
-                <td>
-                  {{task.status}}
-                </td>
+            <tbody>
+              <tr *ngFor="let task of tasks">
+                <th scope="row">{{task.nameTask}}</th>
+                <td>{{task.descriptionTask}}</td>
+                <td>{{task.project}}</td>
+                <td>{{task.status}}</td>
                 <td>
                   <button type="button"
                     class="btn btn-sm btn-default">Delete</button>
                   <button type="button"
-                    class="btn btn-sm btn-default">Update</button><button
-                    type="button"
+                    class="btn btn-sm btn-default">Update</button>
+                  <button type="button"
                     class="btn btn-sm btn-default">Details</button>
                 </td>
               </tr>
             </tbody>
+
           </table>
           <table class="table align-items-center table-flush"
             *ngIf="tasks && tasks.length == 0">

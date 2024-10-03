@@ -30,7 +30,7 @@ export class SidebarComponent implements OnInit {
   public isCollapsed = true;
   public userName: string | undefined;
   public email: string | undefined;
-  public userId: string | null = null;
+  public idUser: string | null = null;
   user$: Observable<UserModel | UserResponse> = of();
   user: UserModel;
   constructor(private router: Router,
@@ -49,7 +49,7 @@ export class SidebarComponent implements OnInit {
     return this.menuItems.map(item => {
       return {
         ...item,
-        path: item.path.replace(':email', this.email || '')
+        path: item.path.replace(':idUser', this.idUser || '')
       };
     });
   }
