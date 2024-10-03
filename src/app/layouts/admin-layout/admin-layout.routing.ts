@@ -12,12 +12,12 @@ import { ListTaskComponent } from 'src/app/pages/task/list-task/list-task.compon
 
 
 export const AdminLayoutRoutes: Routes = [
-  { path: 'dashboard/:userId', component: DashboardComponent },
-  { path: 'user-profile/:email', component: UserProfileComponent },
-  { path: 'tables/:userId', component: TablesComponent },
-  { path: 'maps/:userId', component: MapsComponent },
-  { path: 'create-task/:userId', component: CreateTaskComponent },
-  { path: 'create-project/:userId', component: CreateProjectComponent },
-  { path: 'list-project/:userId', component: ListProjectComponent },
-  { path: 'list-task/:userId', component: ListTaskComponent },
+  { path: 'dashboard/:idUser', component: DashboardComponent },
+  { path: 'user-profile/:idUser', component: UserProfileComponent },
+  { path: 'tables/:idUser', component: TablesComponent },
+  { path: 'maps/:idUser', component: MapsComponent },
+  { path: 'create-task/:idUser', component: CreateTaskComponent },
+  { path: 'create-project/:idUser', component: CreateProjectComponent },
+  { path: 'list-project/:idUser', component: ListProjectComponent },
+  { path: 'list-task/:idUser', component: ListTaskComponent },
 ];

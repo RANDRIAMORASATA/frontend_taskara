@@ -43,11 +43,11 @@ export class LoginComponent {
             if (userResponse && userResponse.user) {
               const user: UserModel = userResponse.user; // Assurancede l user userResponse.user correspond à UserModel
               this.userService.setUser(user); // Stockage de  l'utilisateur dans le service
-              const userId = userResponse.user._id_user;
+              const idUser = userResponse.user.idUser;
 
-              console.log("---------------user ID récupéré ------------------", userId);
+              console.log("---------------user ID récupéré ------------------", idUser);
               console.log("---------------user récupéré ------------------", user);
-              this.router.navigate(['/dashboard', email]);
+              this.router.navigate(['/dashboard', idUser]);
             }
           })
         } else {

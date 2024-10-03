@@ -44,7 +44,7 @@ export class CreateProjectComponent implements OnInit {
         deadline: new Date(deadline.toISOString()),
         createdAt: new Date(),
         updatedAt: null,
-        user: { _id_user: this.projectForm.value._user_id, name_user: 'John Doe' },
+        user: { idUser: this.projectForm.value._user_id, nameUser: 'John Doe' },
         tasks: [{ _id_task: '1001', name_task: 'Intégration des pages' }]
       };
       console.log('Project before sending:', project);

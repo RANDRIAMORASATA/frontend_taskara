@@ -9,7 +9,7 @@
     </button>
     <!-- Brand -->
     <a class="navbar-brand pt-0" routerLinkActive="active"
-      [routerLink]="['/dashboard/:userId']">
+      [routerLink]="['/dashboard', user?.idUser]">
       <h1 class="text-success"
         style="text-align: left; font-size:2rem; font-weight:bold;">TASKARA</h1>
     </a>
@@ -34,28 +34,33 @@
               <img alt="Image placeholder"
                 src="./assets/img/theme/team-1-800x800.jpg">
             </span>
+            <span>{{user.idUser}}</span>
           </div>
         </a>
         <div class="dropdown-menu-arrow dropdown-menu-right" ngbDropdownMenu>
           <div class=" dropdown-header noti-title">
             <h6 class="text-overflow m-0">Welcome!</h6>
           </div>
-          <a routerLinkActive="active" [routerLink]="['/user-profile/:userId']"
+          <a routerLinkActive="active"
+            [routerLink]="['/user-profile', user?.idUser]"
             class="dropdown-item">
             <i class="ni ni-single-02"></i>
             <span>My profile</span>
           </a>
-          <a routerLinkActive="active" [routerLink]="['/user-profile/:userId']"
+          <a routerLinkActive="active"
+            [routerLink]="['/user-profile', user?.idUser]"
             class="dropdown-item">
             <i class="ni ni-settings-gear-65"></i>
             <span>Settings</span>
           </a>
-          <a routerLinkActive="active" [routerLink]="['/user-profile/:userId']"
+          <a routerLinkActive="active"
+            [routerLink]="['/user-profile', user?.idUser]"
             class="dropdown-item">
             <i class="ni ni-calendar-grid-58"></i>
             <span>Activity</span>
           </a>
-          <a routerLinkActive="active" [routerLink]="['/user-profile/:userId']"
+          <a routerLinkActive="active"
+            [routerLink]="['/user-profile', user?.idUser]"
             class="dropdown-item">
             <i class="ni ni-support-16"></i>
             <span>Support</span>
@@ -75,7 +80,8 @@
       <div class="navbar-collapse-header d-md-none">
         <div class="row">
           <div class="col-6 collapse-brand">
-            <a routerLinkActive="active" [routerLink]="['/dashboard']">
+            <a routerLinkActive="active"
+              [routerLink]="['/dashboard', user?.idUser]">
               <img src="./assets/img/brand/blue.png">
             </a>
           </div>
@@ -93,7 +99,8 @@
       <ul class="navbar-nav">
         <li *ngFor="let menuItem of menuItems"
           class="{{menuItem.class}} nav-item">
-          <a routerLinkActive="active" [routerLink]="[menuItem.path]"
+          <a routerLinkActive="active"
+            [routerLink]="[menuItem.path, user?.idUser]"
             class="nav-link">
             <i class="ni {{menuItem.icon}}"></i>
             {{menuItem.title}}
