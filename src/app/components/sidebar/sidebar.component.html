@@ -9,7 +9,7 @@
     </button>
     <!-- Brand -->
     <a class="navbar-brand pt-0" routerLinkActive="active"
-      [routerLink]="['/dashboard', user?.idUser]">
+      [routerLink]="['/dashboard', user?._id_user]">
       <h1 class="text-success"
         style="text-align: left; font-size:2rem; font-weight:bold;">TASKARA</h1>
     </a>
@@ -34,7 +34,7 @@
               <img alt="Image placeholder"
                 src="./assets/img/theme/team-1-800x800.jpg">
             </span>
-            <span>{{user.idUser}}</span>
+            <span>{{user.name_user}}</span>
           </div>
         </a>
         <div class="dropdown-menu-arrow dropdown-menu-right" ngbDropdownMenu>
@@ -42,25 +42,25 @@
             <h6 class="text-overflow m-0">Welcome!</h6>
           </div>
           <a routerLinkActive="active"
-            [routerLink]="['/user-profile', user?.idUser]"
+            [routerLink]="['/user-profile', user?._id_user]"
             class="dropdown-item">
             <i class="ni ni-single-02"></i>
             <span>My profile</span>
           </a>
           <a routerLinkActive="active"
-            [routerLink]="['/user-profile', user?.idUser]"
+            [routerLink]="['/user-profile', user?._id_user]"
             class="dropdown-item">
             <i class="ni ni-settings-gear-65"></i>
             <span>Settings</span>
           </a>
           <a routerLinkActive="active"
-            [routerLink]="['/user-profile', user?.idUser]"
+            [routerLink]="['/user-profile', user?._id_user]"
             class="dropdown-item">
             <i class="ni ni-calendar-grid-58"></i>
             <span>Activity</span>
           </a>
           <a routerLinkActive="active"
-            [routerLink]="['/user-profile', user?.idUser]"
+            [routerLink]="['/user-profile', user?._id_user]"
             class="dropdown-item">
             <i class="ni ni-support-16"></i>
             <span>Support</span>
@@ -81,7 +81,7 @@
         <div class="row">
           <div class="col-6 collapse-brand">
             <a routerLinkActive="active"
-              [routerLink]="['/dashboard', user?.idUser]">
+              [routerLink]="['/dashboard', user?._id_user]">
               <img src="./assets/img/brand/blue.png">
             </a>
           </div>

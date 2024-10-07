@@ -2,10 +2,10 @@ import { ProjectModel } from './project.model';
 import { TaskModel } from './task.model';
 
 export interface UserModel {
-  idUser: string;
-  nameUser: string;
+  _id_user: string;
+  name_user: string;
   email: string;
   mdp: string;
-  confirmMdp: string;
-  infosUser: string;
+  confirm_mdp: string;
+  infos_user: string;
 }

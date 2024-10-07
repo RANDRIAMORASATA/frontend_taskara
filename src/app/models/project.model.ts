@@ -9,6 +9,6 @@ export interface ProjectModel {
   updatedAt?: Date;
   status: string;
   deadline: Date;
-  user?: Pick<UserModel, 'idUser' | 'nameUser'>;
+  user?: Pick<UserModel, '_id_user' | 'name_user'>;
   tasks?: Pick<TaskModel, '_id_task' | 'name_task'>[];
 }

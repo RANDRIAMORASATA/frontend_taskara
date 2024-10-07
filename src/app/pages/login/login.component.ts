@@ -43,7 +43,7 @@ export class LoginComponent {
             if (userResponse && userResponse.user) {
               const user: UserModel = userResponse.user; // Assurancede l user userResponse.user correspond à UserModel
               this.userService.setUser(user); // Stockage de  l'utilisateur dans le service
-              const idUser = userResponse.user.idUser;
+              const idUser = userResponse.user._id_user;
 
               console.log("---------------user ID récupéré ------------------", idUser);
               console.log("---------------user récupéré ------------------", user);

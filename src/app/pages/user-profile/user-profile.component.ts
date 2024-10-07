@@ -4,6 +4,7 @@ import { catchError, Observable, of } from 'rxjs';
 import { UserModel } from 'src/app/models/user.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserResponse } from 'src/app/models/user-response.model';
+import { AuthService } from 'src/app/services/auth/auth-service.service';
 
 
 @Component({
@@ -14,26 +15,96 @@ import { UserResponse } from 'src/app/models/user-response.model';
 export class UserProfileComponent implements OnInit {
   user$: Observable<UserModel | UserResponse> = of();
   user: UserModel;
+  initialUser: UserModel;
 
   constructor(
     private userService: UserService,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    private router: Router,
+    private authService: AuthService
+
+  ) {
+
+  }
 
   ngOnInit() {
-    this.user = this.userService.getUser(); // Récupérez l'utilisateur
-    if (!this.user) {
-      // Si l'utilisateur n'est pas trouvé dans le service, vous pouvez gérer ce cas
-      console.warn('Aucun utilisateur trouvé. Vérifiez la connexion.');
-    }
-    console.log('User in user profile:', this.user);
-  }
-  private isUserModel(response: any): response is UserModel {
-    return response && typeof response._id_user === 'string';
+    this.userService.user$.subscribe(user => {
+      this.user = user;
+      if (!this.user) {
+        console.warn('Aucun utilisateur trouvé. Vérifiez la connexion.');
+      } else {
+        this.initialUser = {
+          ...this.user,
+          infos_user: this.user.infos_user || '', // Assurez-vous que c'est bien défini dans le modèle
+          name_user: this.user.name_user || '', // Changer name_user en nameUser si c'est le bon nom
+          email: this.user.email || '',
+        };
+      }
+      console.log('User in user profile:', this.user);
+    });
   }
 
+
   updateUser() {
-    // Logique pour mettre à jour l'utilisateur
-    console.log('Utilisateur mis à jour:', this.user);
+    if (this.user) {
+      const userData: Partial<UserModel> = {};
+
+      console.log('Current user data:', this.user);
+      console.log('Initial user data:', this.initialUser);
+
+      // Comparaisons
+      if (this.user.name_user?.trim() !== this.initialUser.name_user?.trim()) {
+        userData.name_user = this.user.name_user;
+        console.log('NameUser changed:', this.user.name_user);
+      }
+
+      if (this.user.email?.trim() !== this.initialUser.email?.trim()) {
+        userData.email = this.user.email;
+        console.log('Email changed:', this.user.email);
+      }
+
+      if (this.user.infos_user?.trim() !== this.initialUser.infos_user?.trim()) {
+        userData.infos_user = this.user.infos_user;
+        console.log('InfosUser changed:', this.user.infos_user);
+      }
+
+      if (Object.keys(userData).length === 0) {
+        console.warn('No changes detected.');
+        return;
+      }
+
+      console.log('User data before update:', userData);
+
+      this.userService.updateUser({ ...this.user, ...userData }).subscribe(
+        response => {
+          console.log('User updated successfully:', response);
+        },
+        error => {
+          console.error('Error updating user:', error);
+        }
+      );
+    } else {
+      console.warn('No user to update.');
+    }
   }
+
+  onDeleteUser(userId: string) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+      this.userService.deleteUser(userId).subscribe(response => {
+        if (response) {
+          console.log('User deleted successfully:', response);
+          this.authService.logout(); // Déconnexion automatique
+          this.router.navigate(['/login'])
+          // Mettez à jour votre UI ou redirigez l'utilisateur
+        } else {
+          console.error('Failed to delete user');
+        }
+      });
+    }
+  }
+
+
+
+
+
 }

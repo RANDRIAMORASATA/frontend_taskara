@@ -53,8 +53,8 @@
                     <input type="text" id="input-username"
                       class="form-control form-control-alternative"
                       placeholder="Name"
-                      [value]="user?.nameUser"
-                      (input)="user.nameUser = $event.target.value">
+                      [value]="user?.name_user"
+                      (input)="user.name_user = $event.target.value">
                   </div>
                 </div>
                 <div class="col-lg-6">
@@ -114,12 +114,17 @@
                 <label>About Me</label>
                 <textarea rows="4"
                   class="form-control form-control-alternative"
-                  placeholder="A few words about you ..."></textarea>
+                  placeholder="A few words about you ..."
+                  [value]="user?.infos_user"
+                  (input)="user.infos_user = $event.target.value"></textarea>
               </div>
             </div>
             <div class="pl-lg-4">
               <div class="form-group text-right">
-                <button class="btn btn btn-dark">Update</button>
+                <button class="btn btn btn-dark"
+                  (click)="updateUser()">Update</button>
+                <button class="btn btn btn-dark"
+                  (click)="onDeleteUser(user._id_user)">Delete</button>
               </div>
             </div>
 

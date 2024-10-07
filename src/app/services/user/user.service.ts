@@ -20,7 +20,9 @@ export class UserService {
   private userSubject = new BehaviorSubject<UserModel | undefined>(undefined);
   user$ = this.userSubject.asObservable();
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService) {
+    this.loadUserFromLocalStorage();
+  }
 
   getUserData(): Observable<UserModel | undefined> {
     const token = this.authService.getToken();
@@ -62,11 +64,38 @@ export class UserService {
     return this.userSubject.value;
   }
 
+
+
   private loadUserFromLocalStorage() {
     const user = localStorage.getItem('currentUser');
     if (user) {
-      this.userSubject.next(JSON.parse(user)); // Charger l'utilisateur depuis localStorage
+      this.userSubject.next(JSON.parse(user)); // Charge l'utilisateur depuis localStorage
     }
   }
+
+  updateUser(user: UserModel): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+    return this.http.put(`${this.userUrl}/${user._id_user}`, user, { headers })
+      .pipe(
+        catchError(error => {
+          console.error('Error updating user:', error);
+          return of(null);
+        })
+      );
+  }
+
+  deleteUser(userId: string): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+    return this.http.delete(`${this.userUrl}/${userId}`, { headers })
+      .pipe(
+        catchError(error => {
+          console.error('Error deleting user:', error);
+          return of(null); // Ou utilisez throwError pour une gestion des erreurs plus poussée
+        })
+      );
+  }
+
+
+
 
 }
