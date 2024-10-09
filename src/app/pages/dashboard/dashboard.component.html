@@ -187,15 +187,13 @@
             <tbody>
               <tr *ngFor="let project of projects">
                 <th scope="row">
-                  {{ project.nameProject }} <!-- Correct property name -->
+                  {{ project.name_project }}
                 </th>
                 <td>
-                  {{ project.descriptionProject }}
-                  <!-- Correct property name -->
+                  {{ project.description_project }}
                 </td>
                 <td>
                   {{ project.status }}
-                  <!-- Ensure this property exists in your model -->
                 </td>
                 <td>
                   <button type="button"

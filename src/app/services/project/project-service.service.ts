@@ -1,37 +1,41 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, map, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, throwError } from 'rxjs';
 import { ProjectModel } from 'src/app/models/project.model';
+import { AuthService } from '../auth/auth-service.service';
 
 export interface ProjectsResponse {
   projects: ProjectModel[];
+
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
-
-  private apiUrl = 'http://localhost:8000/project';
+  private projectSubject = new BehaviorSubject<ProjectModel | undefined>(undefined);
+  private projectUrl = 'http://localhost:8000/project';
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
     })
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService) { }
 
   // Méthode pour récupérer les projets par utilisateur
   getProjectsByUser(userId: string): Observable<ProjectModel[]> {
-    return this.http.get<ProjectModel[]>(`${this.apiUrl}/${userId}`, this.httpOptions).pipe(
+    return this.http.get<ProjectModel[]>(`${this.projectUrl}/${userId}`, this.httpOptions).pipe(
       catchError(this.handleError)
     );
   }
 
   createProject(project: ProjectModel): Observable<any> {
-    return this.http.post<any>(this.apiUrl, project, this.httpOptions).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post(this.projectUrl, project, {
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
@@ -45,11 +49,29 @@ export class ProjectService {
     // Optionally, display user-friendly error messages to the UI
     return throwError(errorMessage);
   }
+  setProject(project: ProjectModel) {
+    this.projectSubject.next(project);
+    localStorage.setItem('currentUser', JSON.stringify(project)); // Sauvegarde dans localStorage
+  }
+
+  getProject(): ProjectModel | undefined {
+    return this.projectSubject.value;
+  }
 
   getProjects(): Observable<ProjectsResponse> {
-    return this.http.get<ProjectsResponse>(this.apiUrl, this.httpOptions).pipe(
+    return this.http.get<ProjectsResponse>(this.projectUrl, this.httpOptions).pipe(
       catchError(this.handleError)
     );
+  }
+  deleteProject(projectId: string): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
+    return this.http.delete(`${this.projectUrl}/${projectId}`, { headers })
+      .pipe(
+        catchError(error => {
+          console.error('Error deleting user:', error);
+          return of(null); // Ou utilisez throwError pour une gestion des erreurs plus poussée
+        })
+      );
   }
 
 

@@ -19,13 +19,13 @@
         <a class="nav-link nav-link-icon" role="button" ngbDropdownToggle>
           <i class="ni ni-bell-55"></i>
         </a>
-        <div class="dropdown-menu-arrow dropdown-menu-right" ngbDropdownMenu>
+        <!--<div class="dropdown-menu-arrow dropdown-menu-right" ngbDropdownMenu>
           <a class="dropdown-item" href="javascript:void(0)">Action</a>
           <a class="dropdown-item" href="javascript:void(0)">Another action</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="javascript:void(0)">Something else
             here</a>
-        </div>
+        </div>-->
       </li>
       <li class="nav-item" ngbDropdown placement="bottom-right">
         <a class="nav-link" role="button" ngbDropdownToggle>
@@ -34,9 +34,10 @@
               <img alt="Image placeholder"
                 src="./assets/img/theme/team-1-800x800.jpg">
             </span>
-            <span>{{user.name_user}}</span>
           </div>
+          <span *ngIf="user;">{{user.name_user}}</span>
         </a>
+
         <div class="dropdown-menu-arrow dropdown-menu-right" ngbDropdownMenu>
           <div class=" dropdown-header noti-title">
             <h6 class="text-overflow m-0">Welcome!</h6>
@@ -47,13 +48,13 @@
             <i class="ni ni-single-02"></i>
             <span>My profile</span>
           </a>
-          <a routerLinkActive="active"
+          <!--<a routerLinkActive="active"
             [routerLink]="['/user-profile', user?._id_user]"
             class="dropdown-item">
             <i class="ni ni-settings-gear-65"></i>
             <span>Settings</span>
-          </a>
-          <a routerLinkActive="active"
+          </a>-->
+          <!-- <a routerLinkActive="active"
             [routerLink]="['/user-profile', user?._id_user]"
             class="dropdown-item">
             <i class="ni ni-calendar-grid-58"></i>
@@ -64,7 +65,7 @@
             class="dropdown-item">
             <i class="ni ni-support-16"></i>
             <span>Support</span>
-          </a>
+          </a>-->
           <div class="dropdown-divider"></div>
           <a href="#!" class="dropdown-item">
             <i class="ni ni-user-run"></i>

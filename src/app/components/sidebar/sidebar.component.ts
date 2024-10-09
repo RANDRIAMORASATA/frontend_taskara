@@ -12,10 +12,10 @@ declare interface RouteInfo {
   class: string;
 }
 export const ROUTES: RouteInfo[] = [
-  { path: '/dashboard/:email', title: 'Dashboard', icon: 'ni-tv-2 text-primary', class: '' },
-  { path: '/user-profile/:email', title: 'User profile', icon: 'ni-single-02 text-yellow', class: '' },
-  { path: '/list-project/:email', title: 'Project', icon: 'ni ni-fat-add text-primary', class: '' },
-  { path: '/list-task/:email', title: 'Task', icon: 'ni-key-25 text-warning', class: '' },
+  { path: '/dashboard/:idUser', title: 'Dashboard', icon: 'ni-tv-2 text-primary', class: '' },
+  { path: '/user-profile/:idUser', title: 'User profile', icon: 'ni-single-02 text-yellow', class: '' },
+  { path: '/list-project/:idUser', title: 'Project', icon: 'ni ni-fat-add text-primary', class: '' },
+  { path: '/list-task/:idUser', title: 'Task', icon: 'ni-key-25 text-warning', class: '' },
 
 ];
 
@@ -28,20 +28,22 @@ export class SidebarComponent implements OnInit {
 
   public menuItems: any[];
   public isCollapsed = true;
-  public userName: string | undefined;
-  public email: string | undefined;
-  public idUser: string | null = null;
-  user$: Observable<UserModel | UserResponse> = of();
-  user: UserModel;
+
+  user: UserModel | undefined;
+
   constructor(private router: Router,
     private userService: UserService
   ) { }
 
   ngOnInit() {
-    this.user = this.userService.getUser();
     this.menuItems = ROUTES.filter(menuItem => menuItem);
     this.router.events.subscribe(() => {
       this.isCollapsed = true;
+    });
+    this.userService.getUserConnected().subscribe(userConnected => {
+      this.user = userConnected;
+      console.log('user sidebar:', this.user)
+      this.menuItems = this.getRoutes();
     });
 
   }
@@ -49,7 +51,7 @@ export class SidebarComponent implements OnInit {
     return this.menuItems.map(item => {
       return {
         ...item,
-        path: item.path.replace(':idUser', this.idUser || '')
+        path: item.path.replace(':idUser', this.user?._id_user || '')
       };
     });
   }

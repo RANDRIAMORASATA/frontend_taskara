@@ -3,7 +3,7 @@
     <!-- Brand -->
     <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
       routerLinkActive="active"
-      [routerLink]="['/dashboard/:userId']">{{getTitle()}}</a>
+      [routerLink]="['/dashboard', user?._id_user]">{{getTitle()}}</a>
     <!-- User -->
     <ul class="navbar-nav align-items-center d-none d-md-flex">
       <li class="nav-item" ngbDropdown placement="bottom-right">
@@ -15,7 +15,7 @@
             </span>
             <div class="media-body ml-2 d-none d-lg-block" *ngIf="user">
               <span
-                class="mb-0 text-sm  font-weight-bold">{{user.nameUser}}</span>
+                class="mb-0 text-sm  font-weight-bold">{{user.name_user}}</span>
             </div>
           </div>
         </a>
@@ -23,7 +23,8 @@
           <div class=" dropdown-header noti-title">
             <h6 class="text-overflow m-0">Welcome!</h6>
           </div>
-          <a routerLinkActive="active" [routerLink]="['/user-profile/:userId']"
+          <a routerLinkActive="active"
+            [routerLink]="['/user-profile', user?._id_user]"
             class="dropdown-item">
             <i class="ni ni-single-02"></i>
             <span>My profile</span>

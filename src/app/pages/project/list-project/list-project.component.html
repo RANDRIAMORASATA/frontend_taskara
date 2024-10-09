@@ -22,7 +22,10 @@
                 class="input-group input-group-rounded input-group-merge border-primary">
                 <input type="search"
                   class="form-control form-control-rounded form-control-prepended border-primary"
-                  placeholder="Search" aria-label="Search">
+                  placeholder="Search"
+                  aria-label="Search"
+                  [(ngModel)]="searchTerm"
+                  (input)="filterProjects()">
                 <div class="input-group-prepend">
                   <div class="input-group-text text-primary">
                     <span class="fa fa-search"></span>
@@ -32,7 +35,8 @@
             </form>
             <div class="col text-right">
               <button type="button"
-                class="btn btn-sm btn-default">Create</button>
+                class="btn btn-sm btn-default"
+                (click)="redirectToCreateProject()">Create</button>
             </div>
           </div>
         </div>
@@ -48,20 +52,21 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let project of projects">
-                <th scope="row">{{ project.nameProject }}</th>
-                <td>{{ project.descriptionProject }}</td>
+              <tr *ngFor="let project of filteredProjects">
+                <th scope="row">{{ project.name_project }}</th>
+                <td>{{ project.description_project }}</td>
                 <td>{{ project.status }}</td>
                 <td>
                   <button type="button"
-                    class="btn btn-sm btn-default">Delete</button>
+                    class="btn btn-sm btn-default"
+                    (click)="onDeleteProject(project._id_project)">Delete</button>
                   <button type="button"
                     class="btn btn-sm btn-default">Update</button>
                   <button type="button"
                     class="btn btn-sm btn-default">Details</button>
                 </td>
               </tr>
-              <tr *ngIf="projects.length === 0">
+              <tr *ngIf="filteredProjects.length === 0">
                 <td colspan="4" class="text-center">No projects found.</td>
               </tr>
             </tbody>

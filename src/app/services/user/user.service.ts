@@ -20,7 +20,9 @@ export class UserService {
   private userSubject = new BehaviorSubject<UserModel | undefined>(undefined);
   user$ = this.userSubject.asObservable();
 
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService) {
     this.loadUserFromLocalStorage();
   }
 
@@ -94,8 +96,22 @@ export class UserService {
         })
       );
   }
-
-
-
+  getUserConnected(): Observable<UserModel | null> {
+    return this.user$.pipe(
+      map(user => {
+        if (!user) {
+          console.warn('Aucun utilisateur trouvé. Vérifiez la connexion.');
+          return null;
+        } else {
+          return {
+            ...user,
+            infos_user: user.infos_user || '',
+            name_user: user.name_user || '',
+            email: user.email || '',
+          };
+        }
+      })
+    );
+  }
 
 }

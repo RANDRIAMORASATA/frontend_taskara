@@ -13,8 +13,7 @@ import { AuthService } from 'src/app/services/auth/auth-service.service';
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-  user$: Observable<UserModel | UserResponse> = of();
-  user: UserModel;
+  user: UserModel | undefined;
   initialUser: UserModel;
 
   constructor(
@@ -28,18 +27,8 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userService.user$.subscribe(user => {
-      this.user = user;
-      if (!this.user) {
-        console.warn('Aucun utilisateur trouvé. Vérifiez la connexion.');
-      } else {
-        this.initialUser = {
-          ...this.user,
-          infos_user: this.user.infos_user || '', // Assurez-vous que c'est bien défini dans le modèle
-          name_user: this.user.name_user || '', // Changer name_user en nameUser si c'est le bon nom
-          email: this.user.email || '',
-        };
-      }
+    this.userService.getUserConnected().subscribe(userConnected => {
+      this.user = userConnected;
       console.log('User in user profile:', this.user);
     });
   }
@@ -102,9 +91,5 @@ export class UserProfileComponent implements OnInit {
       });
     }
   }
-
-
-
-
 
 }

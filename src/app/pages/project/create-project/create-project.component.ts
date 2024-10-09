@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProjectService } from '../../../services/project/project-service.service';
 import { ProjectModel } from '../../../models/project.model';
+import { UserService } from 'src/app/services/user/user.service';
+import { UserModel } from 'src/app/models/user.model';
+import { TaskModel } from '../../../models/task.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-project',
@@ -10,18 +14,32 @@ import { ProjectModel } from '../../../models/project.model';
 })
 export class CreateProjectComponent implements OnInit {
   projectForm: FormGroup;
+  user: UserModel | undefined;
 
-  constructor(private fb: FormBuilder, private projectService: ProjectService) { }
-
+  constructor(
+    private fb: FormBuilder,
+    private projectService: ProjectService,
+    private userService: UserService,
+    private router: Router) { }
+  generateId(): string {
+    return 'project_' + Math.random().toString(36).substr(2, 9);
+  }
   ngOnInit(): void {
+
+    const _id_project = this.generateId();
     this.projectForm = this.fb.group({
-      _id_project: ['', Validators.required],
+      _id_project: [{ value: _id_project, disabled: true }],
       name_project: ['', Validators.required],
       description_project: ['', Validators.required],
       status: ['', Validators.required],
       deadline: ['', Validators.required],
-      _user_id: ['693'],
-      tasks: [[]] // Optionnel si vous avez une logique de tâches plus complexe
+      _user_id: this.user?._id_user || '',
+      tasks: [[]]
+    });
+    this.userService.getUserConnected().subscribe(userConnected => {
+      this.user = userConnected;
+      //this.projectForm.patchValue({ _user_id: this.user?._id_user });
+      console.log('user create project:', userConnected)
     });
   }
 
@@ -36,26 +54,30 @@ export class CreateProjectComponent implements OnInit {
     }
 
     if (this.projectForm.valid) {
-      const project: ProjectModel = {
-        _id_project: this.projectForm.value._id_project,
+      const projectData: ProjectModel = {
+        _id_project: this.projectForm.value._id_project, // Inclure _id_project
         name_project: this.projectForm.value.name_project,
         description_project: this.projectForm.value.description_project,
         status: this.projectForm.value.status,
-        deadline: new Date(deadline.toISOString()),
-        createdAt: new Date(),
-        updatedAt: null,
-        user: { _id_user: this.projectForm.value._user_id, name_user: 'John Doe' },
-        tasks: [{ _id_task: '1001', name_task: 'Intégration des pages' }]
+        deadline: this.projectForm.value.deadline, // Assurez-vous que le format de la date est correct
+        _user_id: this.user?._id_user || '', // Assurez-vous que _user_id est bien défini
+        tasks: this.projectForm.value.tasks || [] // Inclure les tâches, même si elles sont vides
       };
-      console.log('Project before sending:', project);
+      console.log('ProjectData:', projectData);
+      const requestData = {
+        ...projectData,
+        _user_id: this.user?._id_user || '',
+      };
+      console.log('requestData:', requestData);
 
-      this.projectService.createProject(project).subscribe({
+      this.projectService.createProject(requestData).subscribe({
         next: (response) => {
-          console.log('Project created successfully', response);
+          console.log('Project created successfully:', response);
+          this.router.navigate(['/list-project', this.user?._id_user]);
         },
         error: (error) => {
-          console.error('Error creating project', error);
-          console.error('Server returned code', error.status, 'body was:', error.error);
+          console.error('Error creating project:', error);
+          alert('Une erreur est survenue lors de l\'enregistrement. Veuillez vérifier vos données.');
         }
       });
     } else {
@@ -63,5 +85,6 @@ export class CreateProjectComponent implements OnInit {
       this.projectForm.markAllAsTouched();
     }
   }
+
 
 }

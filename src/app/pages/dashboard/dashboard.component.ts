@@ -74,9 +74,6 @@ export class DashboardComponent implements OnInit {
       data: chartExample2.data
     });
 
-
-
-
   }
 
   loadProjects(): void {
