@@ -45,13 +45,12 @@ export class ProjectService {
     } else {
       errorMessage = `Server-side error: ${error.status} ${error.message}`;
     }
-    console.error(errorMessage); // Log the error to the console
-    // Optionally, display user-friendly error messages to the UI
+    console.error(errorMessage);
     return throwError(errorMessage);
   }
   setProject(project: ProjectModel) {
     this.projectSubject.next(project);
-    localStorage.setItem('currentUser', JSON.stringify(project)); // Sauvegarde dans localStorage
+    localStorage.setItem('currentProject', JSON.stringify(project)); // Sauvegarde dans localStorage
   }
 
   getProject(): ProjectModel | undefined {
@@ -63,6 +62,7 @@ export class ProjectService {
       catchError(this.handleError)
     );
   }
+
   deleteProject(projectId: string): Observable<any> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
     return this.http.delete(`${this.projectUrl}/${projectId}`, { headers })

@@ -18,6 +18,7 @@ import { catchError, Observable, of } from 'rxjs';
 import { UserModel } from 'src/app/models/user.model';
 import { TaskService, TasksResponse } from 'src/app/services/task/task-service.service';
 import { Router } from '@angular/router';
+import { FilterService } from 'src/app/services/filter/filter.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -42,9 +43,14 @@ export class DashboardComponent implements OnInit {
   user$: Observable<UserModel | undefined> = of();
   user: UserModel | undefined;
   projects: ProjectModel[] = [];
+  filteredProjects: ProjectModel[] = [];
+  filteredTasks: TaskModel[] = [];
+  searchTermProjects: string = '';
+  searchTermTasks: string = '';
 
   constructor(calendar: NgbCalendar,
     private router: Router,
+    private filterService: FilterService,
     private projectService: ProjectService,
     private authService: AuthService,
     private userService: UserService,
@@ -55,9 +61,11 @@ export class DashboardComponent implements OnInit {
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
   }
 
+
   ngOnInit(): void {
     this.loadProjects();
-    this.loadTasks();
+    this.loadTasks()
+
     this.datasets = [
       [0, 20, 10, 30, 15, 40, 20, 60, 60],
       [0, 20, 5, 25, 10, 30, 15, 40, 40]
@@ -75,12 +83,19 @@ export class DashboardComponent implements OnInit {
     });
 
   }
+  filterProjects(): void {
+    this.filteredProjects = this.filterService.filterItems(this.projects, this.searchTermProjects, ['name_project', 'description_project']);
+  }
+  filterTasks(): void {
+    this.filteredTasks = this.filterService.filterItems(this.tasks, this.searchTermTasks, ['name_task', 'description_task']);
+  }
 
   loadProjects(): void {
     this.projectService.getProjects().subscribe(
-      (response: ProjectsResponse) => { // Use the new interface
-        this.projects = response.projects; // Now this should work
-        this.cd.detectChanges(); // Optional for OnPush strategy
+      (response: ProjectsResponse) => { // new interface
+        this.projects = response.projects;
+        this.filteredProjects = this.projects;
+        this.cd.detectChanges(); // OnPush strategy
         console.log('Received projects:', this.projects); // Log the received projects
       },
       (error) => {
@@ -88,20 +103,52 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-
-  loadTasks() {
+  loadTasks(): void {
     this.taskService.getTasks().subscribe(
-      (response: TasksResponse) => {
+      (response: TasksResponse) => { // new interface
         this.tasks = response.tasks;
-        this.cd.detectChanges();
-        console.log('Received tasks', this.tasks);
-
+        this.filteredTasks = this.tasks;
+        this.cd.detectChanges(); // OnPush strategy
+        console.log('Received tasks:', this.tasks); // Log the received taskss
       },
       (error) => {
         console.error('Error fetching tasks', error);
       }
     );
   }
+
+  onDeleteTask(taskId: string) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet tache ?')) {
+      this.taskService.deleteTask(taskId).subscribe(response => {
+        if (response) {
+          console.log('Task deleted successfully:', response);
+          // Met à jour la liste des projets
+          this.tasks = this.tasks.filter(project => project._id_task !== taskId);
+          this.filteredTasks = this.filteredTasks.filter(project => project._id_task !== taskId);
+          this.cd.detectChanges();
+        } else {
+          console.error('Failed to delete task');
+        }
+      });
+    }
+  }
+
+  onDeleteProject(projectId: string) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet projet ?')) {
+      this.projectService.deleteProject(projectId).subscribe(response => {
+        if (response) {
+          console.log('Project deleted successfully:', response);
+          // Met à jour la liste des projets
+          this.projects = this.projects.filter(project => project._id_project !== projectId);
+          this.filteredProjects = this.filteredProjects.filter(project => project._id_project !== projectId);
+          this.cd.detectChanges();
+        } else {
+          console.error('Failed to delete project');
+        }
+      });
+    }
+  }
+
   public updateOptions() {
     this.salesChart.data.datasets[0].data = this.data;
     this.salesChart.update();

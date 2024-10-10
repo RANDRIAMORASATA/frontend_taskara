@@ -29,7 +29,7 @@ export class ListProjectComponent implements OnInit {
     this.loadProjects();
     this.userService.getUserConnected().subscribe(userConnected => {
       this.user = userConnected;
-      console.log('User in user profile:', this.user);
+      console.log('User in list project:', this.user);
     });
   }
 
@@ -54,7 +54,7 @@ export class ListProjectComponent implements OnInit {
     this.router.navigate(['/create-project/:userName']);
   }
   onDeleteProject(projectId: string) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet projet ?')) {
       this.projectService.deleteProject(projectId).subscribe(response => {
         if (response) {
           console.log('Project deleted successfully:', response);

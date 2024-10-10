@@ -7,5 +7,6 @@ export interface TaskModel {
   description_task: string;
   createdAt: Date;
   updatedAt?: Date;
+  _user_id: string;
   status: string;
 }

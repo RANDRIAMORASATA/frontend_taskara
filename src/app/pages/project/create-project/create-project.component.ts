@@ -55,13 +55,13 @@ export class CreateProjectComponent implements OnInit {
 
     if (this.projectForm.valid) {
       const projectData: ProjectModel = {
-        _id_project: this.projectForm.value._id_project, // Inclure _id_project
+        _id_project: this.projectForm.value._id_project,
         name_project: this.projectForm.value.name_project,
         description_project: this.projectForm.value.description_project,
         status: this.projectForm.value.status,
-        deadline: this.projectForm.value.deadline, // Assurez-vous que le format de la date est correct
-        _user_id: this.user?._id_user || '', // Assurez-vous que _user_id est bien défini
-        tasks: this.projectForm.value.tasks || [] // Inclure les tâches, même si elles sont vides
+        deadline: this.projectForm.value.deadline,
+        _user_id: this.user?._id_user || '',
+        tasks: this.projectForm.value.tasks || []
       };
       console.log('ProjectData:', projectData);
       const requestData = {

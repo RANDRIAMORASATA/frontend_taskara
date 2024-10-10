@@ -22,7 +22,10 @@
                 class="input-group input-group-rounded input-group-merge border-primary">
                 <input type="search"
                   class="form-control form-control-rounded form-control-prepended border-primary"
-                  placeholder="Search" aria-label="Search">
+                  placeholder="Search"
+                  aria-label="Search"
+                  [(ngModel)]="searchTermTasks"
+                  (input)="filterTasks()">
                 <div class="input-group-prepend">
                   <div class="input-group-text text-primary">
                     <span class="fa fa-search"></span>
@@ -32,7 +35,8 @@
             </form>
             <div class="col text-right">
               <button type="button"
-                class="btn btn-sm btn-default">Create</button>
+                class="btn btn-sm btn-default"
+                (click)="redirectToCreateTask()">Create</button>
             </div>
           </div>
         </div>
@@ -49,23 +53,23 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let task of tasks">
-                <th scope="row">{{ task.nameTask }}</th>
-                <td>{{ task.descriptionTask }}</td>
-                <td>{{ task.project?.name || 'Aucun projet' }}</td>
-                <!-- Assure-toi que 'project' a une propriété 'name' -->
+              <tr *ngFor="let task of filteredTasks">
+                <th scope="row">{{ task.name_task }}</th>
+                <td>{{ task.description_task }}</td>
                 <td>{{ task.status }}</td>
                 <td>
                   <button type="button"
-                    class="btn btn-sm btn-default">Delete</button>
+                    class="btn btn-sm btn-default"
+                    (click)="onDeleteTask(task._id_task)">Delete</button>
                   <button type="button"
-                    class="btn btn-sm btn-default">Update</button>
+                    class="btn btn-sm btn-default"
+                    (click)="redirectToUpdateTask(task._id_task)">Update</button>
                   <button type="button"
                     class="btn btn-sm btn-default">Details</button>
                 </td>
               </tr>
               <tr *ngIf="tasks.length === 0">
-                <td colspan="5" class="text-center">Aucune tâche trouvée.</td>
+                <td colspan="5" class="text-center">No tasks found.</td>
               </tr>
             </tbody>
           </table>
