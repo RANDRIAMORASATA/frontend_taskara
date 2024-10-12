@@ -9,15 +9,17 @@ import { CreateTaskComponent } from 'src/app/pages/task/create-task/create-task.
 import { CreateProjectComponent } from 'src/app/pages/project/create-project/create-project.component';
 import { ListProjectComponent } from 'src/app/pages/project/list-project/list-project.component';
 import { ListTaskComponent } from 'src/app/pages/task/list-task/list-task.component';
+import { EditProjectComponent } from 'src/app/pages/project/edit-project/edit-project.component';
 
 
 export const AdminLayoutRoutes: Routes = [
-  { path: 'dashboard/:idUser', component: DashboardComponent },
-  { path: 'user-profile/:idUser', component: UserProfileComponent },
-  { path: 'tables/:idUser', component: TablesComponent },
-  { path: 'maps/:idUser', component: MapsComponent },
-  { path: 'create-task/:idUser', component: CreateTaskComponent },
-  { path: 'create-project/:idUser', component: CreateProjectComponent },
-  { path: 'list-project/:idUser', component: ListProjectComponent },
-  { path: 'list-task/:idUser', component: ListTaskComponent },
+  { path: 'dashboard/:_id_user', component: DashboardComponent },
+  { path: 'user-profile/:_id_user', component: UserProfileComponent },
+  { path: 'tables/:_id_user', component: TablesComponent },
+  { path: 'maps/:_id_user', component: MapsComponent },
+  { path: 'create-task/:_id_user', component: CreateTaskComponent },
+  { path: 'create-project/:_id_user', component: CreateProjectComponent },
+  { path: 'list-project/:_id_user', component: ListProjectComponent },
+  { path: 'list-task/:_id_user', component: ListTaskComponent },
+  { path: 'edit-project/:_id_user/:_id_project', component: EditProjectComponent },
 ];

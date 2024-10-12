@@ -167,17 +167,18 @@
 
             <div class="col text-right">
               <button type="button" class="btn btn-sm btn-primary"
-                (click)="redirectToListProject()">See all</button>
+                (click)="redirectToListProject(user._id_user)">See all</button>
               <button type="button"
                 class="btn btn-sm btn-default"
-                (click)="redirectToCreateProject()">Create</button>
+                (click)="redirectToCreateProject(user._id_user)">Create
+              </button>
             </div>
           </div>
         </div>
         <div class="table-responsive">
           <!-- Projects table -->
           <table class="table align-items-center table-flush"
-            *ngIf="projects && projects.length > 0">
+            *ngIf="filteredProjects && filteredProjects.length > 0">
             <thead class="thead-light">
               <tr>
                 <th scope="col">Titre</th>
@@ -203,7 +204,8 @@
                     class="btn btn-sm btn-default"
                     (click)="onDeleteProject(project._id_project)">Delete</button>
                   <button type="button"
-                    class="btn btn-sm btn-default">Update</button>
+                    class="btn btn-sm btn-default"
+                    (click)="redirectToEditProject( user?._id_user,project._id_project)">Update</button>
                   <button type="button"
                     class="btn btn-sm btn-default">Details</button>
                 </td>
@@ -212,7 +214,7 @@
 
           </table>
           <table class="table align-items-center table-flush"
-            *ngIf="projects && filteredProjects.length === 0">
+            *ngIf="filteredProjects && filteredProjects.length === 0">
             <tr>
               <td colspan="4">No projects found.</td>
             </tr>
@@ -250,10 +252,11 @@
 
             <div class="col text-right">
               <button type="button" class="btn btn-sm btn-primary"
-                (click)="redirectToListTask()">See all</button>
+                (click)="redirectToListTask(user ? user._id_user : null)">See
+                all</button>
               <button type="button"
                 class="btn btn-sm btn-default"
-                (click)="redirectToCreateTask()">Create</button>
+                (click)="redirectToCreateTask(user ? user._id_user : null)">Create</button>
             </div>
           </div>
         </div>
@@ -269,7 +272,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let task of filteredTasks">
+              <tr *ngFor="let task of filteredTasks | slice:0:3">
                 <th scope="row">{{task.name_task}}</th>
                 <td>{{task.description_task}}</td>
                 <td>{{task.status}}</td>

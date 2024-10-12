@@ -22,6 +22,7 @@ import { ListTaskComponent } from 'src/app/pages/task/list-task/list-task.compon
 import { DetailProjectComponent } from 'src/app/pages/project/detail-project/detail-project.component';
 
 import { MatInputModule } from '@angular/material/input';
+import { EditProjectComponent } from 'src/app/pages/project/edit-project/edit-project.component';
 
 
 
@@ -50,6 +51,7 @@ import { MatInputModule } from '@angular/material/input';
     ListProjectComponent,
     ListTaskComponent,
     DetailProjectComponent,
+    EditProjectComponent
   ]
 })
 export class AdminLayoutModule { }

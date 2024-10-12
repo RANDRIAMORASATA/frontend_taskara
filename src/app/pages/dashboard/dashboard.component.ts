@@ -47,6 +47,8 @@ export class DashboardComponent implements OnInit {
   filteredTasks: TaskModel[] = [];
   searchTermProjects: string = '';
   searchTermTasks: string = '';
+  isUpdatedTask: boolean = false;
+  isUpdatedProject: boolean = false;
 
   constructor(calendar: NgbCalendar,
     private router: Router,
@@ -63,9 +65,12 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.userService.getUserConnected().subscribe(userConnected => {
+      this.user = userConnected;
+      console.log('User in dashboard:', this.user);
+    });
     this.loadProjects();
-    this.loadTasks()
-
+    this.loadTasks();
     this.datasets = [
       [0, 20, 10, 30, 15, 40, 20, 60, 60],
       [0, 20, 5, 25, 10, 30, 15, 40, 40]
@@ -95,8 +100,9 @@ export class DashboardComponent implements OnInit {
       (response: ProjectsResponse) => { // new interface
         this.projects = response.projects;
         this.filteredProjects = this.projects;
-        this.cd.detectChanges(); // OnPush strategy
         console.log('Received projects:', this.projects); // Log the received projects
+        this.cd.detectChanges(); // OnPush strategy
+
       },
       (error) => {
         console.error('Error fetching projects', error);
@@ -108,8 +114,8 @@ export class DashboardComponent implements OnInit {
       (response: TasksResponse) => { // new interface
         this.tasks = response.tasks;
         this.filteredTasks = this.tasks;
-        this.cd.detectChanges(); // OnPush strategy
         console.log('Received tasks:', this.tasks); // Log the received taskss
+        this.cd.detectChanges(); // OnPush strategy
       },
       (error) => {
         console.error('Error fetching tasks', error);
@@ -180,17 +186,21 @@ export class DashboardComponent implements OnInit {
     return date.equals(this.fromDate) || date.equals(this.toDate) || this.isInside(date) || this.isHovered(date);
   }
 
-  redirectToCreateProject() {
-    this.router.navigate(['/create-project/:userName']);
+  redirectToCreateProject(_id_user) {
+    this.router.navigate(['/create-project', _id_user]);
   }
-  redirectToListProject() {
-    this.router.navigate(['/list-project/:userId']);
+  redirectToListProject(_id_user) {
+    this.router.navigate(['/list-project', _id_user]);
   }
-  redirectToCreateTask() {
-    this.router.navigate(['/create-task/:userName']);
+  redirectToCreateTask(_id_user) {
+    this.router.navigate(['/create-task', _id_user]);
   }
-  redirectToListTask() {
-    this.router.navigate(['/list-task/:userId']);
+  redirectToListTask(_id_user) {
+    this.router.navigate(['/list-task', _id_user]);
+  }
+
+  redirectToEditProject(_id_user, _project_id) {
+    this.router.navigate(['/edit-project', _id_user, _project_id]);
   }
 
 

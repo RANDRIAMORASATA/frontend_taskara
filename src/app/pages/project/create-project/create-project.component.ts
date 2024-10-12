@@ -33,6 +33,7 @@ export class CreateProjectComponent implements OnInit {
       description_project: ['', Validators.required],
       status: ['', Validators.required],
       deadline: ['', Validators.required],
+      createdAt: [{ value: new Date(), disable: true }],
       _user_id: this.user?._id_user || '',
       tasks: [[]]
     });
@@ -52,6 +53,7 @@ export class CreateProjectComponent implements OnInit {
       console.error('Invalid date');
       return;
     }
+    const createdAt = new Date()
 
     if (this.projectForm.valid) {
       const projectData: ProjectModel = {
@@ -61,6 +63,7 @@ export class CreateProjectComponent implements OnInit {
         status: this.projectForm.value.status,
         deadline: this.projectForm.value.deadline,
         _user_id: this.user?._id_user || '',
+        createdAt: this.projectForm.value.createdAt,
         tasks: this.projectForm.value.tasks || []
       };
       console.log('ProjectData:', projectData);

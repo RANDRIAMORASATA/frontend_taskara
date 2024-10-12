@@ -32,6 +32,15 @@ export class ProjectService {
     );
   }
 
+  getProjects(): Observable<ProjectsResponse> {
+    return this.http.get<ProjectsResponse>(this.projectUrl, this.httpOptions).pipe(
+      catchError(this.handleError)
+    );
+  }
+  getProjectById(_id_project: string): Observable<{ project: ProjectModel }> {
+    return this.http.get<{ project: ProjectModel }>(`http://localhost:8000/project/${_id_project}`);
+  }
+
   createProject(project: ProjectModel): Observable<any> {
     return this.http.post(this.projectUrl, project, {
       headers: { 'Content-Type': 'application/json' }
@@ -57,11 +66,7 @@ export class ProjectService {
     return this.projectSubject.value;
   }
 
-  getProjects(): Observable<ProjectsResponse> {
-    return this.http.get<ProjectsResponse>(this.projectUrl, this.httpOptions).pipe(
-      catchError(this.handleError)
-    );
-  }
+
 
   deleteProject(projectId: string): Observable<any> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
@@ -73,6 +78,10 @@ export class ProjectService {
         })
       );
   }
+  updateProject(projectData: ProjectModel): Observable<any> {
+    return this.http.put(`http://localhost:8000/project/${projectData._id_project}`, projectData);
+  }
+
 
 
 }
