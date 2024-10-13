@@ -63,10 +63,8 @@ export class TaskService {
     );
   }
   // Méthode pour récupérer les projets par utilisateur
-  getTaskById(taskId: string): Observable<TaskModel> {
-    return this.http.get<TaskModel>(`${this.taskUrl}/${taskId}`, this.httpOptions).pipe(
-      catchError(this.handleError)
-    );
+  getTaskById(_id_task: string): Observable<{ task: TaskModel }> {
+    return this.http.get<{ task: TaskModel }>(`http://localhost:8000/task/${_id_task}`);
   }
 
   deleteTask(taskId: string): Observable<any> {
@@ -78,6 +76,9 @@ export class TaskService {
           return of(null); // Ou utilisez throwError pour une gestion des erreurs plus poussée
         })
       );
+  }
+  editTask(taskData: TaskModel): Observable<any> {
+    return this.http.put(`http://localhost:8000/task/${taskData._id_task}`, taskData);
   }
 
 

@@ -36,7 +36,7 @@
             <div class="col text-right">
               <button type="button"
                 class="btn btn-sm btn-default"
-                (click)="redirectToCreateProject()">Create</button>
+                (click)="redirectToCreateProject(user._id_user)">Create</button>
             </div>
           </div>
         </div>
@@ -61,7 +61,8 @@
                     class="btn btn-sm btn-default"
                     (click)="onDeleteProject(project._id_project)">Delete</button>
                   <button type="button"
-                    class="btn btn-sm btn-default">Update</button>
+                    class="btn btn-sm btn-default"
+                    (click)="redirectToEditProject( user?._id_user,project._id_project)">Update</button>
                   <button type="button"
                     class="btn btn-sm btn-default">Details</button>
                 </td>

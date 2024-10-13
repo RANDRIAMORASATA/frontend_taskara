@@ -13,29 +13,26 @@
     <div class="col-lg-8 col-md-10">
       <div class="card bg-secondary shadow border-0">
         <div class="card-body px-lg-5 py-lg-5">
-          <form
-            [formGroup]="projectForm"
-            (ngSubmit)="onSubmit()">
+          <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
               <div class="input-group input-group-alternative mb-3">
-                <input class="form-control" placeholder="Name" type="text"
-                  formControlName="name_project"
-                  [value]="projectForm.value.name_project">
+                <input class="form-control" placeholder="Task Name" type="text"
+                  formControlName="name_task">
               </div>
               <div
-                *ngIf="projectForm.get('name_project').invalid && projectForm.get('name_project').touched"
+                *ngIf="projectForm.get('name_task').invalid && projectForm.get('name_task').touched"
                 class="text-danger">
-                Name is required.
+                Task Name is required.
               </div>
             </div>
             <div class="form-group">
               <div class="input-group input-group-alternative mb-3">
                 <textarea class="form-control form-control-alternative" rows="3"
                   placeholder="Description ..."
-                  formControlName="description_project">{{ projectForm.value.description_project }}</textarea>
+                  formControlName="description_task"></textarea>
               </div>
               <div
-                *ngIf="projectForm.get('description_project').invalid && projectForm.get('description_project').touched"
+                *ngIf="projectForm.get('description_task').invalid && projectForm.get('description_task').touched"
                 class="text-danger">
                 Description is required.
               </div>
@@ -43,7 +40,7 @@
             <div class="form-group">
               <div class="input-group input-group-alternative">
                 <input class="form-control" placeholder="Status" type="text"
-                  formControlName="status" [value]="projectForm.value.status">
+                  formControlName="status">
               </div>
               <div
                 *ngIf="projectForm.get('status').invalid && projectForm.get('status').touched"
@@ -51,22 +48,9 @@
                 Status is required.
               </div>
             </div>
-            <div class="form-group">
-              <div class="input-group input-group-alternative">
-                <input class="form-control" placeholder="Deadline date"
-                  type="date" formControlName="deadline"
-                  [value]="projectForm.value.deadline | date:'yyyy-MM-dd'">
-              </div>
-              <div
-                *ngIf="projectForm.get('deadline').invalid && projectForm.get('deadline').touched"
-                class="text-danger">
-                Deadline is required.
-              </div>
-            </div>
-
             <div class="text-center">
               <button type="submit" class="btn btn-dark mt-4"
-                [disabled]="projectForm.invalid">Update project</button>
+                [disabled]="projectForm.invalid">Update Task</button>
             </div>
           </form>
         </div>

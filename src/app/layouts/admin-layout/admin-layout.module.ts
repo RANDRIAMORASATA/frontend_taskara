@@ -23,6 +23,7 @@ import { DetailProjectComponent } from 'src/app/pages/project/detail-project/det
 
 import { MatInputModule } from '@angular/material/input';
 import { EditProjectComponent } from 'src/app/pages/project/edit-project/edit-project.component';
+import { EditTaskComponent } from 'src/app/pages/task/edit-task/edit-task.component';
 
 
 
@@ -51,7 +52,8 @@ import { EditProjectComponent } from 'src/app/pages/project/edit-project/edit-pr
     ListProjectComponent,
     ListTaskComponent,
     DetailProjectComponent,
-    EditProjectComponent
+    EditProjectComponent,
+    EditTaskComponent
   ]
 })
 export class AdminLayoutModule { }

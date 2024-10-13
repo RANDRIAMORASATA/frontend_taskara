@@ -202,6 +202,8 @@ export class DashboardComponent implements OnInit {
   redirectToEditProject(_id_user, _project_id) {
     this.router.navigate(['/edit-project', _id_user, _project_id]);
   }
-
+  redirectToEditTask(_id_user, _task_id) {
+    this.router.navigate(['/edit-task', _id_user, _task_id]);
+  }
 
 }

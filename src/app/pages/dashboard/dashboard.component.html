@@ -281,7 +281,8 @@
                     class="btn btn-sm btn-default"
                     (click)="onDeleteTask(task._id_task)">Delete</button>
                   <button type="button"
-                    class="btn btn-sm btn-default">Update</button>
+                    class="btn btn-sm btn-default"
+                    (click)="redirectToEditTask( user?._id_user,task._id_task)">Update</button>
                   <button type="button"
                     class="btn btn-sm btn-default">Details</button>
                 </td>

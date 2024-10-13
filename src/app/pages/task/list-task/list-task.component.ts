@@ -56,9 +56,10 @@ export class ListTaskComponent implements OnInit {
     );
   }
 
-  redirectToUpdateTask(taskId: string): void {
-    this.router.navigate(['/update-task', taskId]);
+  redirectToEditTask(_id_user, _task_id) {
+    this.router.navigate(['/edit-task', _id_user, _task_id]);
   }
+
   onDeleteTask(taskId: string) {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet tache ?')) {
       this.taskService.deleteTask(taskId).subscribe(response => {

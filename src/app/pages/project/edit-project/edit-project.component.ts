@@ -18,6 +18,8 @@ export class EditProjectComponent implements OnInit {
   user: UserModel | undefined;
   _id_project: string | null = null;
   taskName: string = ''; // Variable pour stocker le nom de la tâche
+  projects: ProjectModel[] = [];
+
 
   constructor(
     private fb: FormBuilder,
@@ -64,6 +66,7 @@ export class EditProjectComponent implements OnInit {
         const project = response.project;
         console.log('Fetched project:', project); // Ajoutez ceci pour déboguer
         const formattedDate = formatDate(project.createdAt, 'yyyy-MM-dd', 'en-US');
+
         this.projectForm.patchValue({
           name_project: project.name_project,
           description_project: project.description_project,

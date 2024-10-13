@@ -50,8 +50,11 @@ export class ListProjectComponent implements OnInit {
   filterProjects(): void {
     this.filteredProjects = this.filterService.filterItems(this.projects, this.searchTerm, ['name_project', 'description_project']);
   }
-  redirectToCreateProject() {
-    this.router.navigate(['/create-project/:userName']);
+  redirectToCreateProject(_id_user) {
+    this.router.navigate(['/create-project', _id_user]);
+  }
+  redirectToEditProject(_id_user, _project_id) {
+    this.router.navigate(['/edit-project', _id_user, _project_id]);
   }
   onDeleteProject(projectId: string) {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet projet ?')) {

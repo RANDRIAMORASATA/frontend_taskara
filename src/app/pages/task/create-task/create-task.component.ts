@@ -44,25 +44,6 @@ export class CreateTaskComponent implements OnInit {
       //this.projectForm.patchValue({ _user_id: this.user?._id_user });
       console.log('user create project:', userConnected)
     });
-
-    //update
-    this.route.paramMap.subscribe(params => {
-      this.taskId = params.get('id'); // Assume you are passing task ID in the route
-      if (this.taskId) {
-        this.isUpdateMode = true;
-        this.loadTask(this.taskId); // Load the task details if in update mode
-      }
-    });
-
-  }
-  loadTask(taskId: string): void {
-    this.taskService.getTaskById(taskId).subscribe(task => {
-      this.taskForm.patchValue({
-        _id_task: task._id_task,
-        description_task: task.description_task,
-        status: task.status,
-      });
-    });
   }
   onSubmit() {
     console.log('Form values:', this.taskForm.value);
@@ -77,27 +58,16 @@ export class CreateTaskComponent implements OnInit {
 
       };
       console.log('TaskData:', taskData);
-      if (this.isUpdateMode) {
-        this.taskService.updateTask(this.taskId, taskData).subscribe({
-          next: (response) => {
-            this.router.navigate(['/list-task', this.user?._id_user]);
-          },
-          error: (error) => {
-            alert('Une erreur est survenue lors de la mise à jour. Veuillez vérifier vos données.');
-          }
-        });
-      } else {
-        this.taskService.createTask(taskData).subscribe({
-          next: (response) => {
-            console.log('Task created successfully:', response);
-            this.router.navigate(['/list-task', this.user?._id_user]);
-          },
-          error: (error) => {
-            console.error('Error creating task:', error);
-            alert('Une erreur est survenue lors de l\'enregistrement. Veuillez vérifier vos données.');
-          }
-        });
-      }
+      this.taskService.createTask(taskData).subscribe({
+        next: (response) => {
+          console.log('Task created successfully:', response);
+          this.router.navigate(['/list-task', this.user?._id_user]);
+        },
+        error: (error) => {
+          console.error('Error creating task:', error);
+          alert('Une erreur est survenue lors de l\'enregistrement. Veuillez vérifier vos données.');
+        }
+      });
 
     } else {
       console.log('Form is invalid');

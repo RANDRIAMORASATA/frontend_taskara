@@ -10,6 +10,7 @@ import { CreateProjectComponent } from 'src/app/pages/project/create-project/cre
 import { ListProjectComponent } from 'src/app/pages/project/list-project/list-project.component';
 import { ListTaskComponent } from 'src/app/pages/task/list-task/list-task.component';
 import { EditProjectComponent } from 'src/app/pages/project/edit-project/edit-project.component';
+import { EditTaskComponent } from 'src/app/pages/task/edit-task/edit-task.component';
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -22,4 +23,5 @@ export const AdminLayoutRoutes: Routes = [
   { path: 'list-project/:_id_user', component: ListProjectComponent },
   { path: 'list-task/:_id_user', component: ListTaskComponent },
   { path: 'edit-project/:_id_user/:_id_project', component: EditProjectComponent },
+  { path: 'edit-task/:_id_user/:_id_task', component: EditTaskComponent },
 ];
