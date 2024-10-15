@@ -1,14 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
-import Chart from 'chart.js';
 
-// core components
-import {
-  chartOptions,
-  parseOptions,
-  chartExample1,
-  chartExample2
-} from "../../variables/charts";
 import { ProjectModel } from 'src/app/models/project.model';
 import { TaskModel } from 'src/app/models/task.model';
 import { ProjectService, ProjectsResponse } from 'src/app/services/project/project-service.service';
@@ -28,9 +20,6 @@ import { FilterService } from 'src/app/services/filter/filter.service';
 })
 export class DashboardComponent implements OnInit {
 
-  public datasets: any;
-  public data: any;
-  public salesChart;
   public clicked: boolean = true;
   public clicked1: boolean = false;
 
@@ -71,21 +60,7 @@ export class DashboardComponent implements OnInit {
     });
     this.loadProjects();
     this.loadTasks();
-    this.datasets = [
-      [0, 20, 10, 30, 15, 40, 20, 60, 60],
-      [0, 20, 5, 25, 10, 30, 15, 40, 40]
-    ];
-    this.data = this.datasets[0];
 
-    var chartOrders = document.getElementById('chart-orders');
-
-    parseOptions(Chart, chartOptions());
-
-    var ordersChart = new Chart(chartOrders, {
-      type: 'bar',
-      options: chartExample2.options,
-      data: chartExample2.data
-    });
 
   }
   filterProjects(): void {
@@ -155,10 +130,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  public updateOptions() {
-    this.salesChart.data.datasets[0].data = this.data;
-    this.salesChart.update();
-  }
 
   onDateSelection(date: NgbDate) {
     console.log(this.fromDate);

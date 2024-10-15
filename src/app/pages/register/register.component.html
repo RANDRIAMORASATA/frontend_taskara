@@ -24,10 +24,20 @@
                       class="ni ni-single-02"></i></span>
                 </div>
                 <input
-                class="form-control"
-                placeholder="Name"
-                id="name_user"
-                formControlName="name_user">
+                  class="form-control"
+                  placeholder="Name"
+                  id="name_user"
+                  formControlName="name_user">
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <div class="input-group input-group-alternative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i
+                      class="ni ni-single-02"></i></span>
+                </div>
+                <input class="form-control" placeholder="Email" id="email"
+                  formControlName="email" type="email">
               </div>
             </div>
             <div class="form-group mb-3">
@@ -36,8 +46,8 @@
                   <span class="input-group-text"><i
                       class="ni ni-email-83"></i></span>
                 </div>
-                <input class="form-control" placeholder="Email" id="email"
-                  formControlName="email" type="email">
+                <input type="file" (change)="onFileChange($event)"
+                  accept="image/*" />
               </div>
             </div>
             <div class="form-group mb-3">
@@ -71,6 +81,18 @@
                   formControlName="infos_user">
               </div>
             </div>
+            <!-- New fields for role, adress, and contract -->
+            <div class="form-group mb-3">
+              <div class="input-group input-group-alternative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i
+                      class="ni ni-briefcase-24"></i></span>
+                </div>
+                <input class="form-control" placeholder="Role" id="role"
+                  formControlName="role">
+              </div>
+            </div>
+
             <div class="text-center">
               <button type="submit" class="btn btn-dark my-4">Register</button>
             </div>

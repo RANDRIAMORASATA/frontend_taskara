@@ -51,10 +51,8 @@ export class UserService {
   }
 
 
-  registerUser(userData: UserModel): Observable<any> {
-    return this.http.post(this.userUrl, userData, {
-      headers: { 'Content-Type': 'application/json' }
-    });
+  registerUser(userData: FormData): Observable<any> {
+    return this.http.post(this.userUrl, userData);
   }
 
   setUser(user: UserModel) {
@@ -113,5 +111,7 @@ export class UserService {
       })
     );
   }
+
+
 
 }
