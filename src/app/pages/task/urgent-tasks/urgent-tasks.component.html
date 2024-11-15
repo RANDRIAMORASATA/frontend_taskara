@@ -7,7 +7,7 @@
   </div>
 </div>
 
-<div class="container-fluid mt--7">
+<div class="container-fluid mt--7 ">
   <div class="row mt-5">
     <div class="col-xl-12">
       <div class="card shadow">
@@ -33,11 +33,6 @@
                 </div>
               </div>
             </form>
-            <div class="col text-right">
-              <button type="button"
-                class="btn btn-sm btn-default"
-                (click)="redirectToCreateTask()">Create</button>
-            </div>
           </div>
         </div>
         <div class="table-responsive">
@@ -52,20 +47,21 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let task of filteredTasks">
+              <tr *ngFor="let task of urgentTasks"
+                class="urgent-task-text-danger">
                 <th scope="row">{{ task.name_task }}</th>
                 <td>{{ task.description_task }}</td>
                 <td>{{ task.status }}</td>
                 <td>
                   <button type="button"
                     class="btn btn-sm btn-default"
-                    (click)="onDeleteTask(task._id_task)">Delete</button>
+                    (click)="onDeleteProject(project._id_project)">Delete</button>
                   <button type="button"
                     class="btn btn-sm btn-default"
-                    (click)="redirectToEditTask( user?._id_user,task._id_task)">Update</button>
+                    (click)="redirectToEditProject( user?._id_user,project._id_project)">Update</button>
                 </td>
               </tr>
-              <tr *ngIf="tasks.length === 0">
+              <tr *ngIf="urgentTasks.length === 0">
                 <td colspan="5" class="text-center">No tasks found.</td>
               </tr>
             </tbody>

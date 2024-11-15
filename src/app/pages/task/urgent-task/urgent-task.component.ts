@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TaskModel } from 'src/app/models/task.model';
 import { UserModel } from 'src/app/models/user.model';
@@ -7,15 +8,15 @@ import { TaskService, TasksResponse } from 'src/app/services/task/task-service.s
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
-  selector: 'app-update-task',
-  templateUrl: './list-task.component.html',
-  styleUrls: ['./list-task.component.scss']
+  selector: 'app-project-task-details',
+  templateUrl: './urgent-task.component.html',
+  styleUrls: ['./urgent-task.component.scss'],
 })
-export class ListTaskComponent implements OnInit {
+export class TaskUrgentComponent {
   tasks: TaskModel[] = [];
-  filteredTasks: TaskModel[] = [];
   searchTermTasks: string = '';
   user: UserModel | undefined;
+  urgentTasks: TaskModel[] = [];
 
   constructor(
     private taskService: TaskService,
@@ -29,29 +30,28 @@ export class ListTaskComponent implements OnInit {
     this.userService.getUserConnected().subscribe(userConnected => {
       this.user = userConnected;
       console.log('User in user profile:', this.user);
-      this.loadTasks(this.user._id_user);
+      this.loadUrgentTasks(this.user._id_user);
     });
 
 
   }
   filterTasks(): void {
-    this.filteredTasks = this.filterService.filterItems(this.tasks, this.searchTermTasks, ['name_task', 'description_task']);
+    this.urgentTasks = this.filterService.filterItems(this.tasks, this.searchTermTasks, ['name_task', 'description_task']);
   }
 
   redirectToCreateTask() {
     this.router.navigate(['/create-task', this.user._id_user]);
   }
 
-  loadTasks(userId: string): void {
-    this.taskService.getTasksByUser(userId).subscribe(
+  loadUrgentTasks(userId: string): void {
+    this.taskService.getUrgentTasksByUser(userId).subscribe(
       (response: TasksResponse) => {
-        this.tasks = response.tasks; // Tâches reçues
-        this.filteredTasks = this.tasks; // Tâches filtrées
-        this.cd.detectChanges(); //  la détection de changements pour l'affichage
-        console.log('Received tasks:', this.tasks);
+        this.urgentTasks = response.tasks.filter(task => task.isUrgent);
+        console.log('Urgent tasks:', this.urgentTasks);
+        this.cd.detectChanges();  // Trigger change detection manually if necessary
       },
       (error) => {
-        console.error('Error fetching tasks', error);
+        console.error('Error fetching urgent tasks:', error);
       }
     );
   }
@@ -65,9 +65,9 @@ export class ListTaskComponent implements OnInit {
       this.taskService.deleteTask(taskId).subscribe(response => {
         if (response) {
           console.log('Task deleted successfully:', response);
-          // Liste de projets mis à jour
+          // Met à jour la liste des projets
           this.tasks = this.tasks.filter(project => project._id_task !== taskId);
-          this.filteredTasks = this.filteredTasks.filter(project => project._id_task !== taskId);
+          this.urgentTasks = this.urgentTasks.filter(project => project._id_task !== taskId);
           this.cd.detectChanges();
         } else {
           console.error('Failed to delete task');
@@ -77,3 +77,4 @@ export class ListTaskComponent implements OnInit {
   }
 
 }
+

@@ -38,9 +38,12 @@
               </div>
             </div>
             <div class="form-group">
-              <div class="input-group input-group-alternative">
-                <input class="form-control" placeholder="Status" type="text"
-                  formControlName="status">
+              <div class="input-group input-group-alternative mb-3">
+                <select class="form-control" formControlName="status">
+                  <option value="en-cours">En cours</option>
+                  <option value="finished">Terminé</option>
+                  <option value="urgent">Urgent</option>
+                </select>
               </div>
               <div
                 *ngIf="projectForm.get('status').invalid && projectForm.get('status').touched"

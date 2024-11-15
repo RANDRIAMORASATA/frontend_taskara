@@ -45,9 +45,13 @@ export class LoginComponent {
               this.userService.setUser(user); // Stockage de  l'utilisateur dans le service
               const idUser = userResponse.user._id_user;
 
-              console.log("---------------user ID récupéré ------------------", idUser);
-              console.log("---------------user récupéré ------------------", user);
-              this.router.navigate(['/dashboard', idUser]);
+              if (idUser) {
+                console.log("---------------user ID récupéré ------------------", idUser);
+                console.log("---------------user récupéré ------------------", user);
+                this.router.navigate(['/dashboard', idUser]);
+              } else {
+                console.error('User ID is undefined');
+              }
             }
           })
         } else {

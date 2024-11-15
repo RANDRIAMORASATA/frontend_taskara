@@ -1,0 +1,23 @@
+
+
+  select.form-select {
+    display: flex;
+    flex: 1 1 auto;
+    padding-right: 0;
+    padding-left: 0;
+    margin: 0;
+    width: 2rem;
+    height: 2rem;
+    border: none !important;
+  }
+  .ngb-dp-arrow{
+    color: #007bff; /* Couleur des flèches */
+    font-size: 1.25rem;
+  }
+
+  .ngb-dp-arrow:hover {
+    color: #0056b3; /* Couleur des flèches au survol */
+  }
+
+
+

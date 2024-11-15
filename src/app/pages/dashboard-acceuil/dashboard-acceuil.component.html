@@ -1,80 +1,74 @@
 <div class="header bg-gradient-success pb-8 pt-5 pt-md-8">
   <div class="container-fluid">
     <div class="header-body">
-      <!-- Card stats -->
-      <div class="row">
-        <!-- Cards for urgent tasks, urgent projects, and performance -->
-        <div class="col-md-6 mb-4">
-          <div class="card card-stats mb-8 mb-xl-0 card-equal-height">
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <h5 class="card-title text-uppercase text-danger mb-0">
-                    <strong>Tâches urgentes !</strong>
-                  </h5>
-                </div>
-
-                <div class="col-auto">
-                  <div
-                    class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                    <i
-                      class="fas fa-exclamation-triangle"></i>
-
-                  </div>
-                </div>
-              </div>
-              <div *ngIf="urgentTasks.length > 0"
-                class="d-flex">
-                <p
-                  class="mt-2 mb-0 text-muted text-sm">
-                  <span class="text-danger mr-2"><i
-                      class="fas fa-exclamation-triangle"></i>{{
-                    urgentTasks[0].name_task }}</span>
-                </p>
-                <button type="button"
-                  class="btn btn-sm btn-danger"
-                  (click)="redirectToUrgentTasks(user._id_user)">Détails</button>
-              </div>
-              <div *ngIf="urgentTasks.length === 0">
-                <p class="mt-2 mb-0 text-muted text-sm">Aucune tâche urgente
-                  trouvée.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Votre performance -->
-        <div class="col-md-6 mb-4">
-          <div class="card card-stats mb-4 mb-xl-0 card-equal-height">
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">Votre
-                    Performance</h5>
-                </div>
-                <div class="col-auto">
-                  <div
-                    class="icon icon-shape bg-info text-white rounded-circle shadow">
-                    <i class="fas fa-percent"></i>
-                  </div>
-                </div>
-              </div>
-              <p class="mb-0 text-muted text-sm">
-                <span class="text-success mr-2"><i
-                    class="fas fa-arrow-up"></i>{{ performance | number: '1.0-2'
-                  }}%</span>
-              </p>
-            </div>
-          </div>
-        </div>
-
-      </div>
     </div>
   </div>
 </div>
-
-<!--Project et task-->
+<!-- Project et task -->
 <div class="container-fluid mt--7">
+  <div class="row mt-5">
+    <div class="col-xl-12">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">Les urgences</h3>
+            </div>
+            <!-- Form -->
+            <form class="col" *ngIf="urgentTasks && urgentTasks.length > 0">
+              <div
+                class="input-group input-group-rounded input-group-merge border-primary">
+                <input type="search"
+                  class="form-control form-control-rounded form-control-prepended border-primary"
+                  placeholder="Search" aria-label="Search tasks"
+                  [(ngModel)]="searchTermUrgentTasks"
+                  (input)="filterUrgentTasks()">
+                <div class="input-group-prepend">
+                  <div class="input-group-text text-primary">
+                    <span class="fa fa-search"></span>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <div class="col text-right">
+              <button type="button" class="btn btn-sm btn-success"
+                *ngIf="urgentTasks && urgentTasks.length > 1"
+                (click)="redirectToUrgentTask()">See all</button>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-items-center table-flush"
+            *ngIf="filteredTasks && filteredTasks.length > 0">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Titre</th>
+                <th scope="col">Description</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let task of urgentTasks | slice:0:3">
+                <th scope="row">{{task.name_task}}</th>
+                <td>{{task.description_task}}</td>
+                <td>{{task.status}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table align-items-center table-flush"
+            *ngIf="urgentTasks && urgentTasks.length ===  0">
+            <tr>
+              <td colspan="4">No tasks found.</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Projets -->
   <div class="row mt-5">
     <div class="col-xl-12">
       <div class="card shadow">
@@ -83,17 +77,14 @@
             <div class="col">
               <h3 class="mb-0">Projets</h3>
             </div>
-            <!-- Form -->
             <form class="col"
               *ngIf="filteredProjects && filteredProjects.length > 0">
               <div
                 class="input-group input-group-rounded input-group-merge border-primary">
                 <input type="search"
                   class="form-control form-control-rounded form-control-prepended border-primary"
-                  placeholder="Search"
-                  aria-label="Search projects"
-                  [(ngModel)]="searchTermProjects"
-                  (input)="filterProjects()">
+                  placeholder="Search" aria-label="Search projects"
+                  [(ngModel)]="searchTermProjects" (input)="filterProjects()">
                 <div class="input-group-prepend">
                   <div class="input-group-text text-primary">
                     <span class="fa fa-search"></span>
@@ -105,52 +96,30 @@
             <div class="col text-right">
               <button type="button" class="btn btn-sm btn-success"
                 *ngIf="filteredProjects && filteredProjects.length > 1"
-                (click)="redirectToListProject(user._id_user)">See
-                all</button>
-              <button type="button"
-                class="btn btn-sm btn-default"
-                (click)="redirectToCreateProject(user._id_user)">Create
-              </button>
+                (click)="redirectToListProjects()">See all</button>
             </div>
           </div>
         </div>
         <div class="table-responsive">
-          <!-- Projects table -->
           <table class="table align-items-center table-flush"
             *ngIf="filteredProjects && filteredProjects.length > 0">
             <thead class="thead-light">
               <tr>
                 <th scope="col">Titre</th>
-                <th scope="col">description</th>
-                <th scope="col">status</th>
+                <th scope="col">Description</th>
+                <th scope="col">Status</th>
                 <th></th>
               </tr>
             </thead>
-
             <tbody>
               <tr *ngFor="let project of filteredProjects | slice:0:3">
-                <th scope="row">
-                  {{ project.name_project }}
-                </th>
-                <td>
-                  {{ project.description_project }}
-                </td>
-                <td>
-                  {{ project.status }}
-                </td>
-                <td>
-                  <button type="button"
-                    class="btn btn-sm btn-default"
-                    (click)="onDeleteProject(project._id_project)">Delete</button>
-                  <button type="button"
-                    class="btn btn-sm btn-default"
-                    (click)="redirectToEditProject( user?._id_user,project._id_project)">Update</button>
-
-                </td>
+                <th scope="row">{{ project.name_project }}</th>
+                <td>{{ project.description_project }}</td>
+                <td>{{ project.status }}</td>
               </tr>
             </tbody>
-
           </table>
+
           <table class="table align-items-center table-flush"
             *ngIf="filteredProjects && filteredProjects.length === 0">
             <tr>
@@ -160,8 +129,9 @@
         </div>
       </div>
     </div>
-
   </div>
+
+  <!-- Taches -->
   <div class="row mt-5">
     <div class="col-xl-12">
       <div class="card shadow">
@@ -170,16 +140,13 @@
             <div class="col">
               <h3 class="mb-0">Taches</h3>
             </div>
-            <!-- Form -->
             <form class="col" *ngIf="filteredTasks && filteredTasks.length > 0">
               <div
                 class="input-group input-group-rounded input-group-merge border-primary">
                 <input type="search"
                   class="form-control form-control-rounded form-control-prepended border-primary"
-                  placeholder="Search"
-                  aria-label="Search tasks"
-                  [(ngModel)]="searchTermTasks"
-                  (input)="filterTasks()">
+                  placeholder="Search" aria-label="Search tasks"
+                  [(ngModel)]="searchTermTasks" (input)="filterTasks()">
                 <div class="input-group-prepend">
                   <div class="input-group-text text-primary">
                     <span class="fa fa-search"></span>
@@ -191,16 +158,11 @@
             <div class="col text-right">
               <button type="button" class="btn btn-sm btn-success"
                 *ngIf="filteredTasks && filteredTasks.length > 1"
-                (click)="redirectToListTask(user ? user._id_user : null)">See
-                all</button>
-              <button type="button"
-                class="btn btn-sm btn-default"
-                (click)="redirectToCreateTask(user ? user._id_user : null)">Create</button>
+                (click)="redirectToListTasks()">See all</button>
             </div>
           </div>
         </div>
         <div class="table-responsive">
-          <!-- Tasks table -->
           <table class="table align-items-center table-flush"
             *ngIf="filteredTasks && filteredTasks.length > 0">
             <thead class="thead-light">
@@ -218,11 +180,10 @@
                 <td>
                   <button type="button"
                     class="btn btn-sm btn-default"
-                    (click)="onDeleteTask(task._id_task)">Delete</button>
+                    (click)="onDeleteProject(project._id_project)">Delete</button>
                   <button type="button"
                     class="btn btn-sm btn-default"
-                    (click)="redirectToEditTask( user?._id_user,task._id_task)">Update</button>
-
+                    (click)="redirectToEditProject( user?._id_user,project._id_project)">Update</button>
                 </td>
               </tr>
             </tbody>
@@ -239,4 +200,28 @@
     </div>
   </div>
 
+  <!-- Commentaire Section (disponible pour tous les utilisateurs) -->
+  <div class="row mt-5">
+    <div class="col-xl-12">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">Commentaires</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="form-group">
+              <label for="commentaire">Laissez un commentaire :</label>
+              <textarea id="commentaire" class="form-control" rows="3"
+                placeholder="Votre commentaire..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Envoyer</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

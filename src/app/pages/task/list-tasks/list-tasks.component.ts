@@ -8,14 +8,15 @@ import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-update-task',
-  templateUrl: './list-task.component.html',
-  styleUrls: ['./list-task.component.scss']
+  templateUrl: './list-tasks.component.html',
+  styleUrls: ['./list-tasks.component.scss']
 })
-export class ListTaskComponent implements OnInit {
+export class ListTasksComponent implements OnInit {
   tasks: TaskModel[] = [];
   filteredTasks: TaskModel[] = [];
   searchTermTasks: string = '';
   user: UserModel | undefined;
+  urgentTasks: TaskModel[] = [];
 
   constructor(
     private taskService: TaskService,
@@ -26,10 +27,10 @@ export class ListTaskComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.loadTasks()
     this.userService.getUserConnected().subscribe(userConnected => {
       this.user = userConnected;
       console.log('User in user profile:', this.user);
-      this.loadTasks(this.user._id_user);
     });
 
 
@@ -42,19 +43,38 @@ export class ListTaskComponent implements OnInit {
     this.router.navigate(['/create-task', this.user._id_user]);
   }
 
-  loadTasks(userId: string): void {
-    this.taskService.getTasksByUser(userId).subscribe(
-      (response: TasksResponse) => {
-        this.tasks = response.tasks; // Tâches reçues
-        this.filteredTasks = this.tasks; // Tâches filtrées
-        this.cd.detectChanges(); //  la détection de changements pour l'affichage
-        console.log('Received tasks:', this.tasks);
+  loadTasks(): void {
+    this.taskService.getTasks().subscribe(
+      (response: TasksResponse) => { // new interface
+        this.tasks = response.tasks;
+        this.filteredTasks = this.tasks;
+        console.log('Received tasks:', this.tasks); // Log the received taskss
+        this.loadUrgentTasks();
+        this.cd.detectChanges(); // OnPush strategy
       },
       (error) => {
         console.error('Error fetching tasks', error);
       }
     );
   }
+  loadUrgentTasks(): void {
+    console.log('All tasks:', this.tasks);
+
+    // If tasks are empty, return early
+    if (this.tasks.length === 0) {
+      console.log('No tasks to filter');
+      return;
+    }
+
+    this.urgentTasks = this.tasks.filter(task => {
+      const isUrgent = !!task.isUrgent;
+      console.log(`Task ${task.name_task} - isUrgent normalized:`, isUrgent);
+      return isUrgent;
+    });
+
+    console.log('Urgent tasks:', this.urgentTasks);
+  }
+
 
   redirectToEditTask(_id_user, _task_id) {
     this.router.navigate(['/edit-task', _id_user, _task_id]);
@@ -65,7 +85,7 @@ export class ListTaskComponent implements OnInit {
       this.taskService.deleteTask(taskId).subscribe(response => {
         if (response) {
           console.log('Task deleted successfully:', response);
-          // Liste de projets mis à jour
+          // Met à jour la liste des projets
           this.tasks = this.tasks.filter(project => project._id_task !== taskId);
           this.filteredTasks = this.filteredTasks.filter(project => project._id_task !== taskId);
           this.cd.detectChanges();

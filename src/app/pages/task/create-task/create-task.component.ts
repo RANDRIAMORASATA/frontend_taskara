@@ -37,6 +37,7 @@ export class CreateTaskComponent implements OnInit {
       task_name: ['', Validators.required],
       description_task: ['', Validators.required],
       status: ['', Validators.required],
+
     });
 
     this.userService.getUserConnected().subscribe(userConnected => {
@@ -48,13 +49,18 @@ export class CreateTaskComponent implements OnInit {
   onSubmit() {
     console.log('Form values:', this.taskForm.value);
     if (this.taskForm.valid) {
+      const status = this.taskForm.value.status;
+
+      // si la tâche est urgente
+      const isUrgent = status === 'urgent';
       const taskData: TaskModel = {
         _id_task: this.taskForm.value._id_task,
         name_task: this.taskForm.value.task_name,
         description_task: this.taskForm.value.description_task,
-        status: this.taskForm.value.status,
+        status: status,
         _user_id: this.user?._id_user || '',
         createdAt: new Date(),
+        isUrgent: isUrgent,
 
       };
       console.log('TaskData:', taskData);

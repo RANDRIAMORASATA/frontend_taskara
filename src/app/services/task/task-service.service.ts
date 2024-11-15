@@ -56,6 +56,23 @@ export class TaskService {
     return this.tasksSubject.value;
   }
 
+  // Méthode pour récupérer les tâches par utilisateur
+  getTasksByUser(userId: string): Observable<TasksResponse> {
+    const token = this.authService.getToken(); // Récupère le token JWT
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<TasksResponse>(`${this.taskUrl}/${userId}`, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getUrgentTasksByUser(userId: string): Observable<TasksResponse> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<TasksResponse>(`${this.taskUrl}/urgent/${userId}`, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
   // Récupération de tous les taches
   getTasks(): Observable<TasksResponse> {
     return this.http.get<TasksResponse>(this.taskUrl, this.httpOptions).pipe(
@@ -73,7 +90,7 @@ export class TaskService {
       .pipe(
         catchError(error => {
           console.error('Error deleting user:', error);
-          return of(null); // Ou utilisez throwError pour une gestion des erreurs plus poussée
+          return of(null);
         })
       );
   }

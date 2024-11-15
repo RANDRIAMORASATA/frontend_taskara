@@ -20,18 +20,21 @@ export class ProjectService {
       'Content-Type': 'application/json'
     })
   };
+  private projectsSubject: BehaviorSubject<ProjectModel[]> = new BehaviorSubject<ProjectModel[]>([]);
 
+  public projects$: Observable<ProjectModel[]> = this.projectsSubject.asObservable();
   constructor(
     private http: HttpClient,
     private authService: AuthService) { }
 
-  // Méthode pour récupérer les projets par utilisateur
-  getProjectsByUser(userId: string): Observable<ProjectModel[]> {
-    return this.http.get<ProjectModel[]>(`${this.projectUrl}/${userId}`, this.httpOptions).pipe(
+  getProjectsByUser(userId: string): Observable<ProjectsResponse> {
+    const token = this.authService.getToken(); // Récupèration du token JWT
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<ProjectsResponse>(`${this.projectUrl}/${userId}`, { headers }).pipe(
       catchError(this.handleError)
     );
   }
-
   getProjects(): Observable<ProjectsResponse> {
     return this.http.get<ProjectsResponse>(this.projectUrl, this.httpOptions).pipe(
       catchError(this.handleError)
@@ -82,6 +85,15 @@ export class ProjectService {
     return this.http.put(`http://localhost:8000/project/${projectData._id_project}`, projectData);
   }
 
-
+  loadProjects(): void {
+    this.getProjects().subscribe(
+      (response) => {
+        this.projectsSubject.next(response.projects); //projet mis à jour
+      },
+      (error) => {
+        console.error('Error fetching projects', error);
+      }
+    );
+  }
 
 }

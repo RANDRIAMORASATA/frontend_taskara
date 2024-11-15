@@ -34,10 +34,12 @@ export class DashboardComponent implements OnInit {
   projects: ProjectModel[] = [];
   filteredProjects: ProjectModel[] = [];
   filteredTasks: TaskModel[] = [];
+  urgentTasks: TaskModel[] = [];
   searchTermProjects: string = '';
   searchTermTasks: string = '';
   isUpdatedTask: boolean = false;
   isUpdatedProject: boolean = false;
+  performance: number = 0;
 
   constructor(calendar: NgbCalendar,
     private router: Router,
@@ -57,11 +59,20 @@ export class DashboardComponent implements OnInit {
     this.userService.getUserConnected().subscribe(userConnected => {
       this.user = userConnected;
       console.log('User in dashboard:', this.user);
+      if (this.user) {
+        this.loadProjects(this.user._id_user);
+        this.loadTasks(this.user._id_user);
+        this.loadUrgentTasks(this.user._id_user);
+      }
     });
-    this.loadProjects();
-    this.loadTasks();
 
 
+    console.log('-------------------urgent task in dashboard:', this.loadUrgentTasks);
+  }
+  calculatePerformance(): void {
+    const totalTasks = this.tasks.length;
+    const completedTasks = this.tasks.filter(task => task.status === 'Completed').length;
+    this.performance = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
   }
   filterProjects(): void {
     this.filteredProjects = this.filterService.filterItems(this.projects, this.searchTermProjects, ['name_project', 'description_project']);
@@ -70,27 +81,26 @@ export class DashboardComponent implements OnInit {
     this.filteredTasks = this.filterService.filterItems(this.tasks, this.searchTermTasks, ['name_task', 'description_task']);
   }
 
-  loadProjects(): void {
-    this.projectService.getProjects().subscribe(
-      (response: ProjectsResponse) => { // new interface
-        this.projects = response.projects;
-        this.filteredProjects = this.projects;
-        console.log('Received projects:', this.projects); // Log the received projects
-        this.cd.detectChanges(); // OnPush strategy
-
+  loadUrgentTasks(userId: string): void {
+    this.taskService.getUrgentTasksByUser(userId).subscribe(
+      (response: TasksResponse) => {
+        this.urgentTasks = response.tasks.filter(task => task.isUrgent);
+        console.log('Urgent tasks:', this.urgentTasks);
+        this.cd.detectChanges();  // Trigger change detection manually if necessary
       },
       (error) => {
-        console.error('Error fetching projects', error);
+        console.error('Error fetching urgent tasks:', error);
       }
     );
   }
-  loadTasks(): void {
-    this.taskService.getTasks().subscribe(
-      (response: TasksResponse) => { // new interface
-        this.tasks = response.tasks;
-        this.filteredTasks = this.tasks;
-        console.log('Received tasks:', this.tasks); // Log the received taskss
-        this.cd.detectChanges(); // OnPush strategy
+
+  loadTasks(userId: string): void {
+    this.taskService.getTasksByUser(userId).subscribe(
+      (response: TasksResponse) => {
+        this.tasks = response.tasks; // Tâches reçues
+        this.filteredTasks = this.tasks; // Tâches filtrées
+        this.cd.detectChanges(); // Déclenche la détection de changements pour l'affichage
+        console.log('Received tasks:', this.tasks);
       },
       (error) => {
         console.error('Error fetching tasks', error);
@@ -98,6 +108,19 @@ export class DashboardComponent implements OnInit {
     );
   }
 
+  loadProjects(_id_user: string): void {
+    this.projectService.getProjectsByUser(_id_user).subscribe(
+      (response: ProjectsResponse) => {
+        this.projects = response.projects;
+        this.filteredProjects = this.projects; // Initialise avec tous les projets
+        this.cd.detectChanges();
+        console.log('Received projects:', this.projects);
+      },
+      (error) => {
+        console.error('Error fetching projects', error);
+      }
+    );
+  }
   onDeleteTask(taskId: string) {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet tache ?')) {
       this.taskService.deleteTask(taskId).subscribe(response => {
@@ -175,6 +198,10 @@ export class DashboardComponent implements OnInit {
   }
   redirectToEditTask(_id_user, _task_id) {
     this.router.navigate(['/edit-task', _id_user, _task_id]);
+  }
+
+  redirectToUrgentTasks(_id_user): void {
+    this.router.navigate(['/urgent-tasks', _id_user]);
   }
 
 }

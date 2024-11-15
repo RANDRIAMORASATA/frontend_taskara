@@ -13,7 +13,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NgbModule
   ],
   declarations: [
-    // Liste de composants d'authentification, si nécessaire
   ]
 })
 export class AuthModule { }

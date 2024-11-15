@@ -4,7 +4,6 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AuthService } from '../auth/auth-service.service';
 import { UserModel } from 'src/app/models/user.model';
-import { jwtDecode } from 'jwt-decode';
 import { UserResponse } from 'src/app/models/user-response.model';
 
 
@@ -55,6 +54,7 @@ export class UserService {
     return this.http.post(this.userUrl, userData);
   }
 
+
   setUser(user: UserModel) {
     this.userSubject.next(user);
     localStorage.setItem('currentUser', JSON.stringify(user)); // Sauvegarde dans localStorage
@@ -90,7 +90,7 @@ export class UserService {
       .pipe(
         catchError(error => {
           console.error('Error deleting user:', error);
-          return of(null); // Ou utilisez throwError pour une gestion des erreurs plus poussée
+          return of(null);
         })
       );
   }

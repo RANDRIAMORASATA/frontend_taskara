@@ -36,6 +36,7 @@ export class UserProfileComponent implements OnInit {
     this.userService.getUserConnected().subscribe(userConnected => {
       this.user = userConnected;
       this.initialUser = { ...userConnected };
+      console.log(this.initialUser)
       this.image_link = this.user.image_link;
       console.log('User in user profile:', this.user);
     });
@@ -65,7 +66,7 @@ export class UserProfileComponent implements OnInit {
 
   private addIfChanged(property: UserModelKeys, userData: Partial<UserModel>) {
     if (this.user[property]?.trim() !== this.initialUser[property]?.trim()) {
-      userData[property] = this.user[property];
+      userData[property] = this.user[property] || '';
       console.log(`${property} changed:`, this.user[property]);
     }
   }
@@ -87,6 +88,8 @@ export class UserProfileComponent implements OnInit {
         const fileExtension = this.user.image_link.split(';')[0].split('/')[1];
         const imageName = `assets/img/user_image/${this.user.name_user}-${Date.now()}.${fileExtension}`;
         userData.image_link = imageName;
+      } else {
+        userData.image_link = this.initialUser.image_link;
       }
 
       if (Object.keys(userData).length === 0) {
@@ -109,15 +112,13 @@ export class UserProfileComponent implements OnInit {
       console.warn('No user to update.');
     }
   }
-
   onDeleteUser(userId: string) {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
       this.userService.deleteUser(userId).subscribe(response => {
         if (response) {
           console.log('User deleted successfully:', response);
-          this.authService.logout(); // Déconnexion automatique
+          this.authService.logout();
           this.router.navigate(['/login'])
-          // Mettez à jour votre UI ou redirigez l'utilisateur
         } else {
           console.error('Failed to delete user');
         }

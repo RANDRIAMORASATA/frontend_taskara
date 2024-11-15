@@ -4,7 +4,6 @@ import { ProjectService, ProjectsResponse } from '../../../services/project/proj
 import { ProjectModel } from '../../../models/project.model';
 import { UserService } from 'src/app/services/user/user.service';
 import { UserModel } from 'src/app/models/user.model';
-import { TaskModel } from '../../../models/task.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { formatDate } from '@angular/common';
 
@@ -17,7 +16,7 @@ export class EditProjectComponent implements OnInit {
   projectForm: FormGroup;
   user: UserModel | undefined;
   _id_project: string | null = null;
-  taskName: string = ''; // Variable pour stocker le nom de la tâche
+  taskName: string = '';
   projects: ProjectModel[] = [];
 
 
@@ -31,14 +30,13 @@ export class EditProjectComponent implements OnInit {
   ngOnInit(): void {
     this._id_project = this.route.snapshot.paramMap.get('_id_project');
     console.log('Project ID from route:', this._id_project);
-    // Continuez avec fetchProject si l'ID est présent
     if (this._id_project) {
       this.fetchProject(this._id_project);
     } else {
       console.error('Project ID is missing');
     }
 
-    // Initialiser le formulaire
+    // Initialisation du formulaire
     this.projectForm = this.fb.group({
       _id_project: [{ value: this._id_project, disabled: true }],
       name_project: ['', Validators.required],
@@ -59,12 +57,12 @@ export class EditProjectComponent implements OnInit {
 
 
   }
-  // Récupérer le projet existant
+  // Récupérationdu projet existant
   fetchProject(_id_project: string) {
     this.projectService.getProjectById(_id_project).subscribe(
       (response: { project: ProjectModel }) => {
         const project = response.project;
-        console.log('Fetched project:', project); // Ajoutez ceci pour déboguer
+        console.log('Fetched project:', project);
         const formattedDate = formatDate(project.createdAt, 'yyyy-MM-dd', 'en-US');
 
         this.projectForm.patchValue({

@@ -50,7 +50,7 @@ export class NavbarComponent implements OnInit {
     return 'Dashboard';
   }
   logout() {
-    this.authService.logout(); // Appel de la méthode logout
+    this.authService.logout();
   }
 
 }

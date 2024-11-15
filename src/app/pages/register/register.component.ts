@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserModel } from '../../models/user.model';
-import { ProjectModel } from '../../models/project.model';
-import { TaskModel } from '../../models/task.model';
-import { ProjectService } from '../../services/project/project-service.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { Router } from '@angular/router';
 import { ValidatorService } from 'src/app/services/validators/validator.service';
@@ -63,7 +59,6 @@ export class RegisterComponent implements OnInit {
 
     if (this.registerForm.valid) {
       const userData = new FormData();
-      // Set values for role, adress, and contract
 
       const fields = ['_id_user', 'name_user', 'email', 'role', 'adress', 'contract', 'mdp', 'confirm_mdp',];
 
@@ -73,10 +68,9 @@ export class RegisterComponent implements OnInit {
       });
 
       if (this.image_link) {
-        const fileType = this.image_link.split(';')[0].split('/')[1]; //the file type
+        const fileType = this.image_link.split(';')[0].split('/')[1];
         const blob = this.dataURLtoBlob(this.image_link);
-        const imageName = `assets/img/user_image/-${Date.now()}.${fileType}`; // the correct extension
-        //userData.append('image', blob, imageName);
+        const imageName = `assets/img/user_image/-${Date.now()}.${fileType}`;
         userData.append('image_link', this.image_link);
 
       }
@@ -100,12 +94,11 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  // Helper function to convert data URL to Blob
   dataURLtoBlob(dataURL: string) {
     const arr = dataURL.split(',');
     const mime = arr[0].match(/:(.*?);/)[1];
     const bstr = atob(arr[1]);
-    let n = bstr.length;  // Changez const en let ici
+    let n = bstr.length;
     const u8arr = new Uint8Array(n);
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n);
@@ -118,12 +111,11 @@ export class RegisterComponent implements OnInit {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.image_link = e.target?.result as string; // Obtenir le lien de l'image
-        this.registerForm.patchValue({ image_link: this.image_link }); // Mettre à jour le champ image_link
-        console.log('Image link updated:', this.image_link); // Vérifiez ici
+        this.image_link = e.target?.result as string;
+        this.registerForm.patchValue({ image_link: this.image_link });
+        console.log('Image link updated:', this.image_link);
       };
       reader.readAsDataURL(file);
-      // Convertir l'image en Data URL
     }
   }
 

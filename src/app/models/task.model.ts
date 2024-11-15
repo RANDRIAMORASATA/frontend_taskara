@@ -1,5 +1,6 @@
 import { ProjectModel } from './project.model';
 import { UserModel } from './user.model';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 
 export interface TaskModel {
   _id_task: string;
@@ -9,4 +10,5 @@ export interface TaskModel {
   updatedAt?: Date;
   _user_id: string;
   status: string;
+  isUrgent: boolean;
 }

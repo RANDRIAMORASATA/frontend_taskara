@@ -7,6 +7,7 @@
   </div>
 </div>
 
+<!-- Page content -->
 <div class="container-fluid mt--7">
   <div class="row mt-5">
     <div class="col-xl-12">
@@ -14,9 +15,8 @@
         <div class="card-header border-0">
           <div class="row align-items-center">
             <div class="col">
-              <h3 class="mb-0">Tâches</h3>
+              <h3 class="mb-0">Projets</h3>
             </div>
-            <!-- Form -->
             <form class="col">
               <div
                 class="input-group input-group-rounded input-group-merge border-primary">
@@ -24,8 +24,8 @@
                   class="form-control form-control-rounded form-control-prepended border-primary"
                   placeholder="Search"
                   aria-label="Search"
-                  [(ngModel)]="searchTermTasks"
-                  (input)="filterTasks()">
+                  [(ngModel)]="searchTerm"
+                  (input)="filterProjects()">
                 <div class="input-group-prepend">
                   <div class="input-group-text text-primary">
                     <span class="fa fa-search"></span>
@@ -36,12 +36,12 @@
             <div class="col text-right">
               <button type="button"
                 class="btn btn-sm btn-default"
-                (click)="redirectToCreateTask()">Create</button>
+                (click)="redirectToCreateProject(user._id_user)">Create</button>
             </div>
           </div>
         </div>
         <div class="table-responsive">
-          <!-- Tasks table -->
+          <!-- Projects table -->
           <table class="table align-items-center table-flush">
             <thead class="thead-light">
               <tr>
@@ -52,21 +52,21 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let task of filteredTasks">
-                <th scope="row">{{ task.name_task }}</th>
-                <td>{{ task.description_task }}</td>
-                <td>{{ task.status }}</td>
+              <tr *ngFor="let project of filteredProjects">
+                <th scope="row">{{ project.name_project }}</th>
+                <td>{{ project.description_project }}</td>
+                <td>{{ project.status }}</td>
                 <td>
                   <button type="button"
                     class="btn btn-sm btn-default"
-                    (click)="onDeleteTask(task._id_task)">Delete</button>
+                    (click)="onDeleteProject(project._id_project)">Delete</button>
                   <button type="button"
                     class="btn btn-sm btn-default"
-                    (click)="redirectToEditTask( user?._id_user,task._id_task)">Update</button>
+                    (click)="redirectToEditProject( user?._id_user,project._id_project)">Update</button>
                 </td>
               </tr>
-              <tr *ngIf="tasks.length === 0">
-                <td colspan="5" class="text-center">No tasks found.</td>
+              <tr *ngIf="filteredProjects.length === 0">
+                <td colspan="4" class="text-center">No projects found.</td>
               </tr>
             </tbody>
           </table>

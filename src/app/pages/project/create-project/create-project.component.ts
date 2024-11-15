@@ -4,7 +4,6 @@ import { ProjectService } from '../../../services/project/project-service.servic
 import { ProjectModel } from '../../../models/project.model';
 import { UserService } from 'src/app/services/user/user.service';
 import { UserModel } from 'src/app/models/user.model';
-import { TaskModel } from '../../../models/task.model';
 import { Router } from '@angular/router';
 
 @Component({
